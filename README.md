@@ -1,7 +1,7 @@
 # Bojxona Qo'llanmasi
 
-Bojxona rasmiylashtiruvi bo'yicha amaliy qo'llanma — yagona, mustaqil (self-contained)
-HTML sahifa sifatida tayyorlangan.
+Bojxona rasmiylashtiruvi bo'yicha interaktiv qo'llanma — yagona, mustaqil
+(self-contained) HTML sahifa sifatida tayyorlangan.
 
 ## Ishga tushirish
 
@@ -17,14 +17,14 @@ python3 -m http.server 8000
 # keyin brauzerda: http://localhost:8000
 ```
 
+> Eslatma: sahifa interaktiv bo'lib, ko'rinishi uchun JavaScript yoqilgan bo'lishi kerak.
+
 ## Tarkibi
 
-- `index.html` — qo'llanmaning to'liq sahifasi (HTML + inline CSS + vanilla JS).
-- Mundarija, jonli qidiruv, jadvallar, bosqichli yo'riqnoma va savol-javob (accordion).
+- `index.html` — qo'llanmaning to'liq sahifasi (Claude Design eksporti, self-contained bundle).
+- `Bojxona Qo'llanmasi.html` — xuddi shu sahifaning nom bilan belgilangan nusxasi.
 
-## Eslatma
+## Manba
 
-Ushbu versiya `Bojxona Qo'llanmasi.dc.html` Claude Design loyihasini amalga oshirish
-uchun boshlang'ich asos sifatida tayyorlandi. Dizayn konnektori (`claude_design` MCP)
-ushbu masofaviy sessiyada mavjud bo'lmagani uchun, sahifa tarkibi va ko'rinishi
-umumiy/neytral uslubda yaratildi va keyinchalik asl dizaynga moslashtirilishi mumkin.
+Ushbu sahifa `Bojxona Qo'llanmasi.dc.html` Claude Design loyihasidan eksport qilingan
+mustaqil (standalone) HTML bundle asosida joylashtirilgan.
