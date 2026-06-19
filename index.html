@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Bojxona Qo'llanmasi — bojxona rasmiylashtiruvi, hujjatlar, to'lovlar va yo'lovchilar uchun me'yorlar bo'yicha amaliy qo'llanma." />
+  <title>Bojxona Qo'llanmasi</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #1e293b;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-soft: #475569;
+      --muted: #64748b;
+      --brand: #0d6e6e;
+      --brand-dark: #0a5252;
+      --brand-soft: #e6f4f4;
+      --accent: #c2410c;
+      --warn-bg: #fef3c7;
+      --warn-border: #f59e0b;
+      --radius: 14px;
+      --shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 8px 24px rgba(15, 23, 42, .06);
+      --maxw: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      background: var(--surface-soft);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+    /* Header */
+    header.site {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, .9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      color: var(--text);
+      font-size: 1.05rem;
+    }
+    .brand .logo {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      display: grid; place-items: center;
+      color: #fff; font-weight: 800; font-size: 1.05rem;
+      box-shadow: var(--shadow);
+    }
+    .nav-links { display: flex; gap: 22px; }
+    .nav-links a { color: var(--text-soft); font-weight: 500; font-size: .95rem; }
+    .nav-links a:hover { color: var(--brand); text-decoration: none; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #0d6e6e 0%, #0a5252 60%, #083f3f 100%);
+      color: #fff;
+      padding: 64px 0 72px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -120px; top: -120px;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(255,255,255,.10), transparent 70%);
+      border-radius: 50%;
+    }
+    .hero .eyebrow {
+      display: inline-block;
+      background: rgba(255, 255, 255, .14);
+      color: #d1f0f0;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .3px;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      line-height: 1.12;
+      margin: 0 0 16px;
+      font-weight: 800;
+      max-width: 720px;
+    }
+    .hero p.lead {
+      font-size: 1.12rem;
+      color: #d8eeee;
+      max-width: 620px;
+      margin: 0 0 28px;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .98rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform .08s ease, background .15s ease;
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-1px); }
+    .btn-primary { background: #fff; color: var(--brand-dark); }
+    .btn-primary:hover { background: #eafafa; }
+    .btn-ghost { background: rgba(255,255,255,.10); color: #fff; border-color: rgba(255,255,255,.28); }
+    .btn-ghost:hover { background: rgba(255,255,255,.18); }
+
+    /* Search */
+    .searchbar {
+      margin: 26px 0 0;
+      max-width: 560px;
+    }
+    .searchbar input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.3);
+      background: rgba(255,255,255,.95);
+      font-size: 1rem;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+    .searchbar input::placeholder { color: var(--muted); }
+    .searchbar input:focus { outline: 3px solid rgba(255,255,255,.4); }
+
+    /* Layout */
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 40px;
+      margin: 48px auto;
+      align-items: start;
+    }
+    aside.toc {
+      position: sticky;
+      top: 88px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    aside.toc h4 {
+      margin: 0 0 12px;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--muted);
+    }
+    aside.toc ol { list-style: none; margin: 0; padding: 0; counter-reset: toc; }
+    aside.toc li { counter-increment: toc; }
+    aside.toc a {
+      display: flex;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: var(--text-soft);
+      font-size: .92rem;
+      font-weight: 500;
+    }
+    aside.toc a::before {
+      content: counter(toc);
+      color: var(--brand);
+      font-weight: 700;
+      min-width: 16px;
+    }
+    aside.toc a:hover { background: var(--brand-soft); color: var(--brand-dark); text-decoration: none; }
+
+    main { min-width: 0; }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .stat b { display: block; font-size: 1.7rem; color: var(--brand); line-height: 1.1; }
+    .stat span { color: var(--muted); font-size: .9rem; }
+
+    /* Sections */
+    section.doc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px 32px;
+      margin-bottom: 26px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 84px;
+    }
+    section.doc h2 {
+      font-size: 1.5rem;
+      margin: 0 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    section.doc h2 .num {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      background: var(--brand-soft);
+      color: var(--brand-dark);
+      display: grid; place-items: center;
+      font-size: 1rem; font-weight: 800;
+      flex: none;
+    }
+    section.doc > p:first-of-type { color: var(--text-soft); }
+    section.doc h3 { font-size: 1.08rem; margin: 22px 0 8px; }
+
+    ul.clean { padding-left: 0; list-style: none; }
+    ul.clean li {
+      position: relative;
+      padding: 6px 0 6px 28px;
+      color: var(--text-soft);
+    }
+    ul.clean li::before {
+      content: "✓";
+      position: absolute; left: 0; top: 6px;
+      color: var(--brand);
+      font-weight: 800;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 4px;
+      font-size: .94rem;
+    }
+    th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+    th { background: var(--surface-soft); color: var(--text); font-weight: 600; }
+    tbody tr:hover { background: var(--brand-soft); }
+
+    .callout {
+      border-left: 4px solid var(--warn-border);
+      background: var(--warn-bg);
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin: 18px 0;
+      color: #78350f;
+      font-size: .95rem;
+    }
+    .callout.info { border-color: var(--brand); background: var(--brand-soft); color: var(--brand-dark); }
+
+    .pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 600;
+    }
+    .pill.ok { background: #dcfce7; color: #166534; }
+    .pill.no { background: #fee2e2; color: #991b1b; }
+
+    /* Cards (documents) */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      background: var(--surface-soft);
+    }
+    .card h4 { margin: 0 0 6px; font-size: 1rem; }
+    .card p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+    /* Steps */
+    ol.steps { counter-reset: step; list-style: none; padding: 0; margin: 16px 0 0; }
+    ol.steps li {
+      position: relative;
+      padding: 0 0 22px 52px;
+      border-left: 2px solid var(--border);
+      margin-left: 16px;
+    }
+    ol.steps li:last-child { border-left-color: transparent; padding-bottom: 0; }
+    ol.steps li::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute; left: -17px; top: -2px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff; font-weight: 700;
+      display: grid; place-items: center;
+    }
+    ol.steps li b { display: block; margin-bottom: 2px; }
+    ol.steps li span { color: var(--text-soft); font-size: .94rem; }
+
+    /* FAQ accordion */
+    details.faq {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0 18px;
+      margin-bottom: 10px;
+      background: var(--surface-soft);
+    }
+    details.faq summary {
+      cursor: pointer;
+      padding: 15px 0;
+      font-weight: 600;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    details.faq summary::-webkit-details-marker { display: none; }
+    details.faq summary::after { content: "+"; color: var(--brand); font-size: 1.4rem; font-weight: 400; }
+    details.faq[open] summary::after { content: "–"; }
+    details.faq p { margin: 0 0 16px; color: var(--text-soft); }
+
+    .no-results { display: none; text-align: center; color: var(--muted); padding: 30px; }
+
+    /* Footer */
+    footer.site {
+      background: var(--bg);
+      color: #cbd5e1;
+      padding: 44px 0 28px;
+      margin-top: 30px;
+    }
+    footer.site .grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 30px;
+    }
+    footer.site h5 { color: #fff; margin: 0 0 12px; font-size: .95rem; }
+    footer.site a { color: #cbd5e1; display: block; padding: 4px 0; font-size: .92rem; }
+    footer.site a:hover { color: #fff; }
+    footer.site .copy {
+      margin-top: 30px; padding-top: 18px;
+      border-top: 1px solid #1e293b;
+      color: var(--muted); font-size: .85rem;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+
+    @media (max-width: 880px) {
+      .layout { grid-template-columns: 1fr; }
+      aside.toc { position: static; order: -1; }
+      .nav-links { display: none; }
+      .stats { grid-template-columns: 1fr; }
+      footer.site .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <span class="logo">B</span>
+        <span>Bojxona Qo'llanmasi</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#kirish">Kirish</a>
+        <a href="#jarayon">Jarayon</a>
+        <a href="#hujjatlar">Hujjatlar</a>
+        <a href="#tolovlar">To'lovlar</a>
+        <a href="#savollar">Savollar</a>
+      </nav>
+    </div>
+  </header>
+
+  <a id="top"></a>
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow">Amaliy qo'llanma · 2026</span>
+      <h1>Bojxona rasmiylashtiruvi bo'yicha to'liq qo'llanma</h1>
+      <p class="lead">
+        Tovarlarni chegaradan o'tkazish, kerakli hujjatlar, bojxona to'lovlari va
+        yo'lovchilar uchun me'yorlar — barchasi bir joyda, sodda va tushunarli tilda.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#jarayon">Jarayonni boshlash →</a>
+        <a class="btn btn-ghost" href="#hujjatlar">Hujjatlar ro'yxati</a>
+      </div>
+      <div class="searchbar">
+        <input id="search" type="search" placeholder="Qo'llanma bo'ylab qidirish (masalan: deklaratsiya, boj, me'yor)…" aria-label="Qidirish" />
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="layout">
+      <aside class="toc">
+        <h4>Mundarija</h4>
+        <ol>
+          <li><a href="#kirish">Kirish</a></li>
+          <li><a href="#jarayon">Rasmiylashtiruv jarayoni</a></li>
+          <li><a href="#hujjatlar">Kerakli hujjatlar</a></li>
+          <li><a href="#tolovlar">Bojxona to'lovlari</a></li>
+          <li><a href="#meyorlar">Yo'lovchilar me'yorlari</a></li>
+          <li><a href="#taqiq">Taqiqlangan tovarlar</a></li>
+          <li><a href="#savollar">Ko'p so'raladigan savollar</a></li>
+        </ol>
+      </aside>
+
+      <main>
+        <div class="stats">
+          <div class="stat"><b>4</b><span>asosiy rasmiylashtiruv bosqichi</span></div>
+          <div class="stat"><b>5</b><span>majburiy hujjat turi</span></div>
+          <div class="stat"><b>24/7</b><span>elektron deklaratsiya tizimi</span></div>
+        </div>
+
+        <section class="doc" id="kirish" data-search>
+          <h2><span class="num">1</span> Kirish</h2>
+          <p>
+            Bojxona rasmiylashtiruvi — bu tovarlar va transport vositalarining davlat
+            chegarasidan o'tkazilishini nazorat qilish hamda tegishli to'lovlarni undirish
+            jarayonidir. Ushbu qo'llanma jismoniy va yuridik shaxslarga bojxona
+            jarayonlarini to'g'ri va tezkor bajarishda yordam beradi.
+          </p>
+          <h3>Ushbu qo'llanma kimlar uchun</h3>
+          <ul class="clean">
+            <li>Tovar import yoki eksport qiluvchi tadbirkorlar</li>
+            <li>Chet eldan pochta yoki yuk orqali buyurtma qiladigan jismoniy shaxslar</li>
+            <li>Chegaradan o'tuvchi yo'lovchilar</li>
+            <li>Logistika va broker xizmatlari xodimlari</li>
+          </ul>
+          <div class="callout info">
+            <strong>Eslatma:</strong> Ushbu qo'llanma umumiy ma'lumot beruvchi material
+            hisoblanadi. Aniq holatlar bo'yicha amaldagi qonunchilik va rasmiy bojxona
+            organlariga murojaat qiling.
+          </div>
+        </section>
+
+        <section class="doc" id="jarayon" data-search>
+          <h2><span class="num">2</span> Rasmiylashtiruv jarayoni</h2>
+          <p>Standart bojxona rasmiylashtiruvi quyidagi bosqichlardan iborat:</p>
+          <ol class="steps">
+            <li>
+              <b>Hujjatlarni tayyorlash</b>
+              <span>Shartnoma, hisob-faktura (invoys), yuk xati va kelib chiqish sertifikatini to'plang.</span>
+            </li>
+            <li>
+              <b>Deklaratsiyani to'ldirish</b>
+              <span>Elektron bojxona deklaratsiyasini (GTD) tizim orqali shakllantiring va tovar kodini (TIF TN) belgilang.</span>
+            </li>
+            <li>
+              <b>To'lovlarni amalga oshirish</b>
+              <span>Bojxona boji, QQS va boshqa yig'imlarni hisoblang hamda to'lang.</span>
+            </li>
+            <li>
+              <b>Nazorat va chiqarish</b>
+              <span>Bojxona inspektori hujjatlarni tekshiradi, zarur bo'lsa ko'rik o'tkazadi va tovarni chiqaradi.</span>
+            </li>
+          </ol>
+        </section>
+
+        <section class="doc" id="hujjatlar" data-search>
+          <h2><span class="num">3</span> Kerakli hujjatlar</h2>
+          <p>Tovar turiga qarab ro'yxat o'zgarishi mumkin, lekin asosiy hujjatlar quyidagilar:</p>
+          <div class="cards">
+            <div class="card"><h4>Invoys</h4><p>Tovar nomi, miqdori va qiymati ko'rsatilgan hisob-faktura.</p></div>
+            <div class="card"><h4>Yuk xati</h4><p>CMR, konosament yoki aviakvitansiya kabi tashish hujjati.</p></div>
+            <div class="card"><h4>Shartnoma</h4><p>Sotuvchi va xaridor o'rtasidagi tashqi savdo shartnomasi.</p></div>
+            <div class="card"><h4>Kelib chiqish sertifikati</h4><p>Tovar qaysi davlatda ishlab chiqarilganini tasdiqlovchi hujjat.</p></div>
+            <div class="card"><h4>Deklaratsiya (GTD)</h4><p>Bojxona yuk deklaratsiyasi — asosiy rasmiy hujjat.</p></div>
+          </div>
+          <div class="callout">
+            <strong>Diqqat:</strong> Ayrim tovarlar uchun qo'shimcha ruxsatnomalar
+            (sanitariya, veterinariya, litsenziya, sertifikatsiya) talab qilinishi mumkin.
+          </div>
+        </section>
+
+        <section class="doc" id="tolovlar" data-search>
+          <h2><span class="num">4</span> Bojxona to'lovlari</h2>
+          <p>Bojxona to'lovlari tovar qiymati (bojxona qiymati) asosida hisoblanadi:</p>
+          <table>
+            <thead>
+              <tr><th>To'lov turi</th><th>Izoh</th><th>Asos</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Bojxona boji</td><td>Tovar kodiga bog'liq stavka</td><td>Bojxona qiymati</td></tr>
+              <tr><td>QQS</td><td>Qo'shilgan qiymat solig'i</td><td>Qiymat + boj</td></tr>
+              <tr><td>Aktsiz solig'i</td><td>Ayrim tovarlar uchun (alkogol, tamaki va h.k.)</td><td>Tovar turi</td></tr>
+              <tr><td>Bojxona yig'imi</td><td>Rasmiylashtiruv uchun belgilangan yig'im</td><td>Qat'iy stavka</td></tr>
+            </tbody>
+          </table>
+          <div class="callout info">
+            <strong>Maslahat:</strong> To'lov summasini oldindan hisoblash uchun bojxona
+            organlarining rasmiy kalkulyatoridan foydalaning.
+          </div>
+        </section>
+
+        <section class="doc" id="meyorlar" data-search>
+          <h2><span class="num">5</span> Yo'lovchilar me'yorlari</h2>
+          <p>Jismoniy shaxslar chegaradan o'tishda quyidagi umumiy qoidalarga amal qiladi:</p>
+          <ul class="clean">
+            <li>Belgilangan qiymatdan oshmaydigan shaxsiy buyumlar bojsiz o'tkaziladi</li>
+            <li>Naqd valyuta belgilangan miqdordan oshsa, majburiy deklaratsiya qilinadi</li>
+            <li>Tijorat partiyasi sifatidagi tovarlar umumiy tartibda rasmiylashtiriladi</li>
+          </ul>
+          <h3>Deklaratsiya kanallari</h3>
+          <table>
+            <thead><tr><th>Kanal</th><th>Qachon tanlanadi</th></tr></thead>
+            <tbody>
+              <tr><td><span class="pill ok">Yashil</span></td><td>Deklaratsiya qilinadigan tovar yo'q</td></tr>
+              <tr><td><span class="pill no">Qizil</span></td><td>Deklaratsiya qilinadigan tovar mavjud</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="doc" id="taqiq" data-search>
+          <h2><span class="num">6</span> Taqiqlangan va cheklangan tovarlar</h2>
+          <p>Quyidagi toifadagi tovarlarni olib o'tish taqiqlanadi yoki maxsus ruxsat talab qiladi:</p>
+          <ul class="clean">
+            <li>Qurol, o'q-dorilar va portlovchi moddalar (maxsus ruxsatsiz)</li>
+            <li>Giyohvand moddalar va psixotrop preparatlar</li>
+            <li>Nodir o'simlik va hayvon turlari (CITES ro'yxati)</li>
+            <li>Madaniy boyliklar va tarixiy qadriyatlar (ruxsatnomasiz)</li>
+            <li>Kontrafakt va soxta mahsulotlar</li>
+          </ul>
+          <div class="callout">
+            <strong>Muhim:</strong> Taqiqlangan tovarlarni deklaratsiya qilmaslik
+            ma'muriy yoki jinoiy javobgarlikka olib kelishi mumkin.
+          </div>
+        </section>
+
+        <section class="doc" id="savollar" data-search>
+          <h2><span class="num">7</span> Ko'p so'raladigan savollar</h2>
+
+          <details class="faq" open>
+            <summary>Deklaratsiyani o'zim to'ldira olamanmi?</summary>
+            <p>Ha. Jismoniy shaxslar oddiy holatlarda deklaratsiyani mustaqil to'ldirishi
+            mumkin. Murakkab tijorat partiyalari uchun bojxona brokeri xizmatidan
+            foydalanish tavsiya etiladi.</p>
+          </details>
+
+          <details class="faq">
+            <summary>Bojxona qiymati qanday aniqlanadi?</summary>
+            <p>Bojxona qiymati asosan tovarning shartnomadagi haqiqiy qiymati, tashish va
+            sug'urta xarajatlari asosida belgilanadi.</p>
+          </details>
+
+          <details class="faq">
+            <summary>To'lovlarni qanday amalga oshiraman?</summary>
+            <p>To'lovlar bank o'tkazmasi yoki elektron to'lov tizimlari orqali, deklaratsiya
+            raqami asosida amalga oshiriladi.</p>
+          </details>
+
+          <details class="faq">
+            <summary>Rasmiylashtiruv qancha vaqt oladi?</summary>
+            <p>To'liq va to'g'ri hujjatlar bilan jarayon odatda bir necha soatdan bir kungacha
+            davom etadi. Qo'shimcha ko'rik talab qilinsa, muddat uzayishi mumkin.</p>
+          </details>
+        </section>
+
+        <p class="no-results" id="noResults">Qidiruv bo'yicha hech narsa topilmadi.</p>
+      </main>
+    </div>
+  </div>
+
+  <footer class="site">
+    <div class="container">
+      <div class="grid">
+        <div>
+          <h5>Bojxona Qo'llanmasi</h5>
+          <p style="color:#94a3b8; font-size:.92rem; max-width:320px;">
+            Bojxona rasmiylashtiruvi bo'yicha amaliy va tushunarli ma'lumotnoma.
+            IBK darslik loyihasi doirasida tayyorlangan.
+          </p>
+        </div>
+        <div>
+          <h5>Bo'limlar</h5>
+          <a href="#jarayon">Rasmiylashtiruv jarayoni</a>
+          <a href="#hujjatlar">Kerakli hujjatlar</a>
+          <a href="#tolovlar">Bojxona to'lovlari</a>
+          <a href="#meyorlar">Yo'lovchilar me'yorlari</a>
+        </div>
+        <div>
+          <h5>Foydali</h5>
+          <a href="#taqiq">Taqiqlangan tovarlar</a>
+          <a href="#savollar">Savol-javob</a>
+          <a href="#top">Yuqoriga ↑</a>
+        </div>
+      </div>
+      <div class="copy">
+        <span>© 2026 Bojxona Qo'llanmasi. Barcha huquqlar himoyalangan.</span>
+        <span>Ma'lumot xarakteriga ega · rasmiy manba emas</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Jonli qidiruv — bo'limlarni matn bo'yicha filtrlash
+    (function () {
+      var input = document.getElementById('search');
+      var sections = Array.prototype.slice.call(document.querySelectorAll('section[data-search]'));
+      var noResults = document.getElementById('noResults');
+
+      input.addEventListener('input', function () {
+        var q = input.value.trim().toLowerCase();
+        var visible = 0;
+        sections.forEach(function (sec) {
+          var match = q === '' || sec.textContent.toLowerCase().indexOf(q) !== -1;
+          sec.style.display = match ? '' : 'none';
+          if (match) visible++;
+        });
+        noResults.style.display = (visible === 0 && q !== '') ? 'block' : 'none';
+      });
+    })();
+  </script>
+</body>
+</html>
