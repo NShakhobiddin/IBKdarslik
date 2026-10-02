@@ -1,0 +1,207 @@
+/* =========================================================
+   data-laws.js — legal references, glossary, figures
+   Holat: 2026-yil 2-oktabr. Raqam o'zgarsa — faqat shu faylni
+   yangilang (kalkulyatorlar RULES'dan o'qiydi).
+   ========================================================= */
+(function (global) {
+  'use strict';
+  const BK = 'https://lex.uz/docs/-2876354', MJTK = 'https://lex.uz/docs/-97664', JPK = 'https://lex.uz/docs/-111460';
+  const BKN = "Bojxona kodeksi (20.01.2016, O'RQ-400)", MJN = "Ma'muriy javobgarlik to'g'risidagi kodeks", JPN = 'Jinoyat-protsessual kodeksi';
+
+  global.LAWS = {
+    /* ---------- Bojxona kodeksi ---------- */
+    'BK-5': { g: 'Bojxona kodeksi', t: 'BK 5-m.', n: BKN, a: "5-modda. Bojxona hududi va bojxona chegarasi", u: BK,
+      s: "Bojxona hududi = O'zbekistonning **quruqligi + hududiy va ichki suvlari + ular ustidagi havo hududi**. Bojxona chegarasi = shu hudud sarhadlari hamda **erkin bojxona zonalari va erkin omborlar perimetri**.",
+      q: "O'zbekiston Respublikasining quruqlikdagi hududi, hududiy va ichki suvlari hamda ular ustidagi havo hududi O'zbekiston Respublikasining bojxona hududini tashkil etadi." },
+    'BK-182': { g: 'Bojxona kodeksi', t: 'BK 182-m.', n: BKN, a: "182-modda. Bojxona nazorati zonasida bojxona organlari mansabdor shaxslarining huquq va majburiyatlari", u: BK,
+      s: "Bojxona nazorati zonasida har qanday faoliyat, shuningdek tovarlar, transport va odamlarning (boshqa davlat organlari xodimlari ham) zona chegarasidan va zona ichida harakatlanishi **faqat bojxona organining ruxsati bilan va uning nazorati ostida** bo'ladi.",
+      note: "Zona ta'rifi (alohida ajratilgan va belgilangan qism; doimiy va vaqtincha zonalar) Kodeksning oldingi moddalarida berilgan." },
+    'BK-188': { g: 'Bojxona kodeksi', t: 'BK 188-m.', n: BKN, a: '188-modda. Bojxona nazorati shakllari', u: BK,
+      s: "Bojxona nazorati shakllarining to'liq ro'yxati shu moddada: hujjat va ma'lumotlarni tekshirish, og'zaki so'rov, tushuntirish olish, ko'zdan kechiruv, markirovkani tekshirish, ko'rik, shaxsiy ko'rik va boshqalar." },
+    'BK-189': { g: 'Bojxona kodeksi', t: 'BK 189-m.', n: BKN, a: '189-modda. Bojxona nazorati shakllarini qo\'llash', u: BK,
+      s: "Bojxona hammani birdek to'liq tekshirmaydi: **tanlab olish prinsipi** (xavflarni boshqarish tizimi asosida). Qonunga rioyani ta'minlash uchun **yetarli bo'lgan eng yengil shakl** tanlanadi. Shaklni vakolatli mansabdor shaxs belgilaydi." },
+    'BK-191': { g: 'Bojxona kodeksi', t: 'BK 191-m.', n: BKN, a: "191-modda. Og'zaki so'rov", u: BK,
+      s: "Eng yengil shakl: kerakli ma'lumot **og'zaki** olinadi, natijasi **yozma rasmiylashtirilmaydi**. Hech narsa ochilmaydi." },
+    'BK-193': { g: 'Bojxona kodeksi', t: 'BK 193-m.', n: BKN, a: '193-modda. Bojxona ko\'zdan kechiruvi', u: BK,
+      s: "Tovar, bagaj yoki transport **ochilmasdan** tekshiriladi: qadoq ochilmaydi, plomba va muhr buzilmaydi, qismlarga ajratilmaydi. Amalda — rentgen-skaner, kinolog iti va boshqa texnik vositalar." },
+    'BK-195': { g: 'Bojxona kodeksi', t: 'BK 195-m.', n: BKN, a: '195-modda. Bojxona ko\'rigi', u: BK,
+      s: "Tovar **ochib** tekshiriladi: chamadon, qadoq, idish ochiladi; plomba, muhr va boshqa identifikatsiya vositalari buzilishi, buyum qismlarga ajratilishi mumkin. Odatda yo'lovchi (deklarant) ishtirokida; egasi bo'lmasa — qonunda belgilangan tartibda ikki xolis bilan." },
+    'BK-196': { g: 'Bojxona kodeksi', t: 'BK 196-m.', n: BKN, a: "196-modda. Shaxsiy ko'rik", u: BK,
+      s: "**Istisno** shakl. Asos: shaxs qonunbuzarlik predmeti bo'lgan tovarni o'zida yashirgan va ixtiyoriy topshirmayapti, degan yetarli asos. **Boshliq yoki uning o'rnini bosuvchi shaxsning yozma qarori**; bir jinsli xodim; bir jinsli **ikki xolis**; alohida xona; tana a'zolarini faqat **tibbiyot xodimi** tekshiradi; **bayonnoma** tuziladi." },
+    /* ---------- MJtK ---------- */
+    'MJtK-227': { g: "Ma'muriy javobgarlik kodeksi", t: 'MJtK 227-m.', n: MJN, a: '227-modda. Bojxona nazorati zonasi rejimini buzish', u: MJTK,
+      s: "Jarima: **fuqarolarga BHMning 1–3 baravari** (440 000–1 320 000 so'm), **mansabdor shaxslarga 3–5 baravari** (1 320 000–2 200 000 so'm). Hisob 2026-yil 1-sentabrdagi BHM = 440 000 so'm bo'yicha." },
+    'MJtK-271': { g: "Ma'muriy javobgarlik kodeksi", t: 'MJtK 271-m.', n: MJN, a: "271-modda. Ish yuritishni istisno qiluvchi holatlar (11-band)", u: MJTK,
+      s: "Tadbirkorlik subyekti (uning xodimi yoki yakka tadbirkor) **birinchi marta** huquqbuzarlik qilib, oqibatini aniqlangan paytdan **30 kun ichida ixtiyoriy bartaraf etsa** yoki zararni qoplasa — ish yuritilmaydi (fuqarolar hayoti yoki sog'lig'iga zarar yetgan holatlar bundan mustasno)." },
+    'MJtK-279': { g: "Ma'muriy javobgarlik kodeksi", t: 'MJtK 279–281-m.', n: MJN, a: "279–281-moddalar. Ma'muriy huquqbuzarlik to'g'risidagi bayonnoma", u: MJTK,
+      s: "Huquqbuzarlik aniqlanganda vakolatli xodim **bayonnoma** tuzadi: kim, qachon, qayerda, nima sodir etdi, guvohlar, tushuntirishlar, olib qo'yilgan narsalar. Bayonnoma ishning asosiy hujjati." },
+    'MJtK-285': { g: "Ma'muriy javobgarlik kodeksi", t: 'MJtK 285–288-m.', n: MJN, a: "285–288-moddalar. Ma'muriy ushlab turish", u: MJTK,
+      s: "285 — ta'minlash choralari; 286 — ma'muriy ushlab turish; 287 — vakolatli organlar (bojxona ham); 288 — muddat: **3 soatdan oshmaydi**, shaxs **bayonnoma tuzish uchun olib kelingan paytdan** hisoblanadi (mast bo'lsa — hushyor tortgan paytdan).",
+      note: "Konstitutsiyaviy sud 2026-yil 22-sentabrda 288-moddaning 2-qismini Konstitutsiyaga zid deb topdi (25.09.2026 dan kuchga kirgan): sud qarorisiz **48 soatdan ortiq** ushlab turish mumkin emas." },
+    'MJtK-294': { g: "Ma'muriy javobgarlik kodeksi", t: 'MJtK 294-m.', n: MJN, a: "294-modda. Javobgarlikka tortilayotgan shaxsning huquqlari", u: MJTK,
+      s: "Shaxs: ish materiallari bilan tanishadi; tushuntirish va dalil beradi; iltimosnoma bildiradi; **advokat** yordamidan foydalanadi; **ona tilida** so'zlaydi, tilni bilmasa **tarjimon** oladi; qarorga shikoyat qiladi. Xodim bu huquqlarni tushuntirishi shart." },
+    /* ---------- JPK ---------- */
+    'JPK-51': { g: 'Jinoyat-protsessual kodeksi', t: 'JPK 51-m.', n: JPN, a: '51-modda. Himoyachi ishtiroki majburiy bo\'lgan hollar', u: JPK,
+      s: "Advokat majburiy: **voyaga yetmaganlar**; soqov, kar, ko'r va boshqa nuqsoni tufayli o'zini himoya qilishga qiynaladiganlar; **ish yuritiladigan tilni bilmaydiganlar** va boshqalar. \"Chet el fuqarosi\" alohida toifa emas — tilni bilmasa, shu bandga kiradi." },
+    'JPK-71': { g: 'Jinoyat-protsessual kodeksi', t: 'JPK 71–72-m.', n: JPN, a: '71–72-moddalar. Tarjimon', u: JPK,
+      s: "Ish yuritiladigan tilni bilmaydigan shaxsga **tarjimon** ta'minlanadi; tarjimon huquq va majburiyatlari tushuntiriladi, hujjatlar tarjimon ishtirokida rasmiylashtiriladi." },
+    'JPK-135': { g: 'Jinoyat-protsessual kodeksi', t: 'JPK 135–141-m.', n: JPN, a: "135–141-moddalar. Ko'zdan kechirish va uning bayonnomasi", u: JPK,
+      s: "135 — asoslar; 136 — umumiy tartib; 139 — joy va binolar; 140 — buyum va hujjatlar; **141 — ko'zdan kechirish bayonnomasi**. Topilgan narsalar batafsil tavsiflanadi, fotosurat va video bilan mustahkamlanadi." },
+    /* ---------- Prezident hujjatlari ---------- */
+    'PF-174': { g: 'Prezident hujjatlari', t: 'PF-174', n: "Prezident Farmoni, 27.08.2026, PF-174", a: '"Davlat bojxona xizmati organlari faoliyatini takomillashtirish va bojxona ma\'murchiligida zamonaviy yondashuvlarni joriy etish chora-tadbirlari to\'g\'risida"',
+      s: "\"Yangi O'zbekiston bojxonasi — 2030\" strategiyasi; tadbirkorlar uchun qulayliklar; AI va avtomatik rasmiylashtirish; **2027-yil 1-yanvardan YBT 20%, kamida 2$/kg**; Raqamli texnologiyalar markazi; yo'l xaritasi va 33 ta hujjatga o'zgartirish.",
+      note: "Qonunchilik ma'lumotlari milliy bazasi: 01.09.2026, 06/26/174/0881-son." },
+    'PQ-4508': { g: 'Prezident hujjatlari', t: 'PQ-4508', n: "Prezident qarori, 07.11.2019, PQ-4508", a: "Jismoniy shaxslar tomonidan shaxsiy ehtiyojlari uchun tovarlarni olib o'tish tartibini yanada takomillashtirish to'g'risida", u: 'https://lex.uz/docs/4585744',
+      s: "Shaxsiy ehtiyojga **kirmaydigan** tovarlar ro'yxati (dvigatellar, isitish qozonlari, solyariylar, sartaroshlik kreslolari, tibbiy mebel va boshqalar) hamda **yagona bojxona to'lovi**: hozir 30%, kamida 3$/kg; alkogol va tamaki — ikki baravar. PF-174 bilan **2027-01-01 dan 20%, kamida 2$/kg**." },
+    'PF-122': { g: 'Prezident hujjatlari', t: 'PF-122 (2022)', n: "Prezident Farmoni, 27.04.2022, PF-122", a: "Bojxona ma'muriyatchiligini yanada takomillashtirishga oid qo'shimcha chora-tadbirlar to'g'risida", u: 'https://lex.uz/ru/docs/5998704',
+      s: "**Masofaviy bojxona nazorati**: Samarqand, so'ng **Toshkent xalqaro aeroportida 2022-yil 1-iyulgacha**, Termizda 1-oktabrgacha, qolganlarida 2023-yil oxirigacha joriy etish." },
+    'PF-5721': { g: 'Prezident hujjatlari', t: 'PF-5721', n: 'Prezident Farmoni, 18.05.2019, PF-5721', a: "Zargarlik buyumlarini olib chiqish me'yorlari", u: 'https://lex.uz/uz/docs/-4344351',
+      s: "Tayyor zargarlik buyumlari YBDsiz: **kumush — 200 g gacha, oltin va boshqa qimmatbaho metall — 65 g gacha**. Undan ortig'i YBD bilan.",
+      note: "PF-185 (31.10.2023) bilan qiymati 100 mln so'mgacha bo'lgan tayyor zargarlik buyumlarini YBDsiz olib chiqishga ruxsat berilgan. Og'irlik va qiymat mezonlarining birga qo'llanishini amaldagi tahrirda tekshiring." },
+    'PF-5286': { g: 'Prezident hujjatlari', t: 'PF-5286', n: 'Prezident Farmoni, 15.12.2017, PF-5286', a: "2-ilova: O'zbekistonga olib kirish taqiqlangan buyumlar ro'yxati", u: 'https://lex.uz/docs/-3460651',
+      s: "Davlat va ijtimoiy tuzumga putur yetkazuvchi, hududiy yaxlitlik va suverenitetni buzishga, urush, **terrorizm** va zo'ravonlikni targ'ib qiluvchi hamda **pornografik** materiallarni olib kirish taqiqlanadi." },
+    'PQ-4422': { g: 'Prezident hujjatlari', t: 'PQ-4422', n: 'Prezident qarori, 22.08.2019, PQ-4422', a: 'Energiya samaradorligi bo\'yicha cheklovlar', u: 'https://lex.uz/docs/-4486125',
+      s: "Ikki alohida taqiq: (1) **ilgari foydalanilgan** generatorlar, kuchlanishni pasaytiruvchi transformatorlar va elektr dvigatellar; (2) energiya samaradorligi **\"D\" va undan past** toifali maishiy elektr asboblari." },
+    'PQ-614': { g: 'Prezident hujjatlari', t: 'PQ-614', n: 'Prezident qarori, 03.04.2007, PQ-614', a: 'Axborotni kriptografik muhofaza qilish', u: 'https://lex.uz/docs/-1155322',
+      s: "Kriptografik muhofaza vositalarini olib kirish/chiqish ruxsatnoma asosida; vakolatli organ — DXX." },
+    'PF-115': { g: 'Prezident hujjatlari', t: 'PF-115 (BHM)', n: 'Prezident Farmoni, 23.06.2026, PF-115', a: 'Ish haqi, pensiya va nafaqalarni oshirish to\'g\'risida', u: 'https://lex.uz/uz/docs/-8283656',
+      s: "**2026-yil 1-sentabrdan 1 BHM = 440 000 so'm** (avval 412 000 so'm). Jarimalar va to'lovlar shu qiymatdan hisoblanadi." },
+    /* ---------- Vazirlar Mahkamasi ---------- */
+    'VM-244': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 244', n: 'VM qarori, 19.04.2025, 244-son', a: 'Ayrim turdagi tovarlarni bojxona chegarasi orqali olib o\'tish tartibini takomillashtirish', u: 'https://lex.uz/uz/docs/-7484114',
+      s: "2025-05-01 dan bojsiz me'yor: **havo — 1 000$**, temir yo'l/daryo — 500$, avtomobil/piyoda — 300$, kuryer — oyiga 200$. **Shart:** xorijda havo yo'lida kamida **3 kalendar kun** (boshqa transportda 2 kun) bo'lish; aks holda me'yor qo'llanmaydi va YBT tovarning **to'liq qiymatiga** hisoblanadi. 21 yoshgacha va pochta/kuryer orqali alkogol-tamaki taqiqlangan." },
+    'VM-814': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 814', n: 'VM qarori, 11.10.2017, 814-son', a: "Ikki yo'lakli va masofaviy bojxona nazorati tizimlarini qo'llash tartibi to'g'risidagi nizom", u: 'https://lex.uz/docs/-3377208',
+      s: "**Yashil yo'lak** — me'yordan oshmagan, yozma deklaratsiya shart bo'lmagan tovarlar (og'zaki deklaratsiya). **Qizil yo'lak** — yozma deklaratsiya shart bo'lgan yoki o'z xohishi bilan deklaratsiya qilinayotgan tovarlar (YBD). Xalqaro aeroportlarda 2018-01-01 dan; keyinroq \"masofaviy nazorat\" qo'shilgan." },
+    'VM-912': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 912', n: 'VM qarori, 18.11.2019, 912-son', a: "O'tkazish punktlarida chegara, bojxona, sanitariya-karantin, fitosanitariya va veterinariya nazoratini tashkil etish", u: 'https://lex.uz/docs/-4598926',
+      s: "Chegaradan o'tuvchi shaxs, transport va tovar **5 xil nazoratdan** o'tadi. O'tkazish punktida: **chegara nazorati bo'linmasi boshlig'i ruxsatisiz** foto/video olish, mobil aloqa vositalaridan foydalanish, xodimlarga moddiy qimmatlik taklif qilish, xizmat hududiga ruxsatsiz kirish taqiqlanadi." },
+    'VM-700': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 700', n: 'VM qarori, 06.11.2025, 700-son', a: "Bojxona sohasidagi ayrim tartib-taomillarni takomillashtirish (1-ilova: Bojxona nazorati shakllarini qo'llash tartibi)", u: 'https://lex.uz/uz/docs/-7816457',
+      s: "**Soddalashtirilgan shaxsiy ko'rik** — tana skaneri kabi texnik vositalar yordamida. **Qaror ham, bayonnoma ham talab etilmaydi.** Qonunbuzarlik aniqlansa — to'liq shaxsiy ko'rik va bayonnoma." },
+    'VM-66': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 66', n: 'VM qarori, 30.01.2018, 66-son (2023-yil tahriri)', a: 'Naqd milliy va chet el valyutasini olib kirish va olib chiqish qoidalari', u: 'https://lex.uz/docs/-3540203',
+      s: "Olib kirish — **cheklanmaydi**. **100 mln so'mdan ortiq** summa kirishda ham, chiqishda ham YBDda ko'rsatiladi. **Rezident** ko'pi bilan **100 mln so'm** ekvivalentini olib chiqadi; undan ortig'ini faqat **norezident** — ilgari olib kirib, deklaratsiya qilgan summa doirasida.",
+      note: "PF-174 bo'yicha deklaratsiyasiz olib chiqish chegarasini 10 000 AQSh dollariga oshirish qonun loyihasi tayyorlanadi (2027-yil dekabr) — hozircha amalda emas." },
+    'VM-102': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 102', n: 'VM qarori, 25.02.2021, 102-son', a: "Me'yordan ortiq notijorat tovarlarga nisbatan tartib-taomillar; vaqtincha saqlash", u: 'https://lex.uz/docs/-5308718',
+      s: "Saqlash haqi har 100 kg (brutto) uchun, har bir to'liq yoki to'liq bo'lmagan kalendar kun uchun BHMga nisbatan foizda hisoblanadi.",
+      note: "Muddat (30/2 kun) va stavkalar (5, 7, 10, 15%) muallif materiallaridan olingan; amaldagi tahrirda tekshiring." },
+    'VM-281': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 281', n: 'VM qarori, 12.05.2020, 281-son', a: "Tovarlarni olib o'tish maqsadini (shaxsiy/tijorat) aniqlash tartibi", u: 'https://lex.uz/docs/-4809628',
+      s: "Shaxsiy yoki tijorat maqsadi tovarning **xususiyati, miqdori, olib o'tish takroriyligi va safar holatlariga** qarab aniqlanadi." },
+    'VM-200': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 200', n: 'VM qarori, 15.07.2009, 200-son', a: "Davlat daromadiga o'tkaziladigan mol-mulkni olib qo'yish, sotish yoki yo'q qilish tartibi", u: 'https://lex.uz/docs/-1498826',
+      s: "Musodara qilingan va davlat daromadiga o'tgan mol-mulk tartibi. PF-174 bilan o'zgartirilgan: chorva va parranda qo'shilgan, IMEI ro'yxatga olish xarajatini chegirish, sotuvdan tushumni **3 kun** ichida o'tkazish.",
+      note: "Ashyoviy dalillarni saqlash alohida — Adliya vazirligida ro'yxatga olingan 2174-son yo'riqnoma (29.12.2010)." },
+    'VM-463': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 463', n: 'VM qarori, 22.06.2018, 463-son (VM 563, 26.10.2023 tahririda)', a: 'Mobil aloqa qurilmalarini olib kirish', u: 'https://lex.uz/uz/docs/-6645422',
+      s: "Havo yo'li bilan har bir kelishda **2 dona** mobil telefon bojxona to'lovisiz olib kiriladi — lekin baribir **deklaratsiya qilinadi**." },
+    'VM-154': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 154', n: 'VM qarori, 09.04.2026, 154-son', a: "BFQ (biologik faol qo'shimchalar) me'yori", u: 'https://lex.uz/uz/docs/-7484114',
+      s: "BFQ: **10 nomgacha**, har bir turidan bittadan ortiq bo'lmagan qadoqda, **jami 3 kg gacha**." },
+    'VM-658': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 658', n: 'VM qarori, 15.11.2022, 658-son', a: 'Uchuvchisiz uchadigan apparatlar (dronlar)', u: 'https://lex.uz/docs/-6284990',
+      s: "Dronlarni olib kirish faqat VMning alohida qarorlari bilan ruxsat berilgan tashkilotlarga mumkin — **jismoniy shaxslar uchun amalda taqiq**." },
+    'VM-213-98': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 213 (1998)', n: 'VM qarori, 15.05.1998, 213-son', a: 'Etil spirtini olib kelishni taqiqlash', u: 'https://lex.uz/ru/docs/-759530',
+      s: "**Etil spirti** barcha transport turlarida olib kirilmaydi va tranzit qilinmaydi." },
+    'VM-213-04': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 213 (2004)', n: 'VM qarori, 06.05.2004, 213-son', a: 'Portlovchi moddalar va portlatish vositalari', u: 'https://lex.uz/docs/-299185',
+      s: "Portlovchi materiallarni faqat litsenziyali yuridik shaxslar IIV ruxsati bilan olib kiradi — jismoniy shaxslar uchun amalda taqiq." },
+    'VM-176': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 176', n: 'VM qarori, 16.08.2007, 176-son', a: "Qimor o'yinlarini tartibga solish", u: 'https://lex.uz/docs/1238377',
+      s: "**Pul yutug'ini beradigan o'yin avtomatlarini** olib kirish taqiqlanadi." },
+    'VM-724': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 309 / 724', n: 'VM qarorlari: 10.12.2009 № 309; 01.12.2021 № 724', a: 'Pirotexnika vositalari', u: 'https://lex.uz/docs/-1557194',
+      s: "Pirotexnika aylanishi cheklangan; **II toifali** pirotexnika muomalasi to'liq taqiqlangan." },
+    'VM-50': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 50', n: 'VM qarori, 20.02.2013, 50-son', a: 'Portativ lazerli nur tarqatgichlar', u: 'https://lex.uz/docs/2135969',
+      s: "**Portativ lazer ko'rsatkichlarni** (TIF TN 9013 20 000 0) olib kirish va sotish 2013-03-01 dan taqiqlangan." },
+    'VM-999': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 999', n: 'VM qarori, 14.12.2019, 999-son', a: 'Induksion pechlar', u: 'https://lex.uz/ru/docs/4644412',
+      s: "Ishlab chiqarilganiga **3 yildan oshgan**, ilgari foydalanilgan **induksion pechlar va kameralar** (TIF TN 8514 20 1000) olib kirilmaydi." },
+    'VM-180': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 180', n: 'VM qarori, 14.04.2022, 180-son', a: 'Diniy mazmundagi materiallar', u: 'https://lex.uz/uz/docs/-5957921',
+      s: "Din ishlari bo'yicha qo'mitaning **ijobiy xulosasisiz** diniy materiallarni olib kirish taqiqlanadi. Shaxsiy ehtiyoj uchun har bir nomdan **3 nusxagacha** mumkin." },
+    'VM-131': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 131', n: 'VM qarori, 23.03.1999, 131-son', a: 'Madaniy boyliklarni olib chiqish va olib kirish', u: 'https://www.lex.uz/docs/-279299',
+      s: "Madaniy boyliklarni olib chiqish huquqini beruvchi **sertifikatni Madaniyat vazirligi** beradi." },
+    'VM-65': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 65', n: 'VM qarori, 29.01.2018, 65-son', a: "O'simliklar karantini", s: "Karantin ostidagi o'simlik mahsulotlari **fitosanitariya hujjatlari** bilan olib o'tiladi." },
+    'VM-290': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 290', n: 'VM qarori, 20.10.2014, 290-son', a: 'Biologik resurslardan foydalanish va ruxsat berish', u: 'https://lex.uz/uz/docs/-2485765',
+      s: "Yovvoyi hayvonlar va o'simliklar (shu jumladan **Qizil kitobga** kiritilganlar) faqat **ruxsatnoma** bilan olib o'tiladi." },
+    'VM-801': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 801', n: 'VM qarori, 22.12.2020, 801-son', a: 'Radioelektron vositalar va yuqori chastotali qurilmalar', u: 'https://lex.uz/docs/-5179158',
+      s: "Radioelektron vositalar va YuChQ olib kirish uchun **ruxsat** olinadi (2-ilova)." },
+    'VM-330': { g: 'Vazirlar Mahkamasi qarorlari', t: 'VM 330 / 472', n: 'VM qarorlari: 12.11.2015 № 330; 29.10.2003 № 472', a: 'Giyohvandlik vositalari, psixotrop moddalar, prekursorlar', u: 'https://lex.uz/docs/-2815340',
+      s: "Ular faqat **ruxsatnoma** bilan olib kiriladi/chiqariladi. Shaxsiy davolanish uchun dori vositalari — alohida tartib (VM 191, 08.06.2016)." },
+    /* ---------- Qonunlar ---------- */
+    'ORQ-844': { g: 'Qonunlar', t: "O'RQ-844", n: "Qonun, 24.05.2023, O'RQ-844", a: "Alkogol va tamaki mahsulotlarining tarqatilishini va iste'mol qilinishini cheklash to'g'risida", u: 'https://lex.uz/docs/-6472100',
+      s: "37-modda: **elektron sigaretalar va ularning suyuqliklari** (nikotinli va nikotinsiz) olib kirilmaydi; **2026-03-01 dan** ularning muomalasi to'liq taqiqlangan. **Polimer (plastik) idishdagi** alkogol bo'yicha cheklov ham shu qonunda (O'RQ-302 2023-08-26 da o'z kuchini yo'qotgan)." },
+    'ORQ-550': { g: 'Qonunlar', t: "O'RQ-550", n: "Qonun, 29.07.2019, O'RQ-550", a: 'Qurol to\'g\'risida', u: 'https://lex.uz/docs/-4445288',
+      s: "Fuqarolik va xizmat quroli hamda o'q-dorilarini olib o'tish faqat **ruxsatnoma** bilan." },
+    'ORQ-678': { g: 'Qonunlar', t: '678-I qonun', n: 'Qonun, 29.08.1998, 678-I', a: '8-modda. Madaniy boyliklarni olib chiqish mumkin emasligi', u: 'https://www.lex.uz/docs/-24377',
+      s: "**50 yil va undan oldin** yaratilgan, davlat reyestridagi, muzey, arxiv va kutubxonalarda doimiy saqlanayotgan madaniy boyliklarni olib chiqish **mumkin emas**." },
+    /* ---------- Yo'riqnomalar va boshqa ---------- */
+    'AV-2606': { g: "Yo'riqnomalar", t: 'YBD yo\'riqnomasi (2606)', n: "Adliya vazirligida 05.08.2014 da 2606-son bilan ro'yxatga olingan", a: "Yo'lovchi bojxona deklaratsiyasini to'ldirish va rasmiylashtirish tartibi", u: 'https://lex.uz/docs/-2442156',
+      s: "YBDni **16 yoshga to'lgan** shaxs to'ldiradi. 2606-8 (27.03.2025) — yangi YBD shakli; **2606-10 (28.02.2026)** — mobil ilova orqali elektron YBD va telefonlarni deklaratsiyalash." },
+    'KS-2026': { g: "Yo'riqnomalar", t: 'Konst. sud, 22.09.2026', n: "O'zbekiston Respublikasi Konstitutsiyaviy sudi qarori", a: "MJtK 288-moddasining 2-qismi Konstitutsiyaga zid deb topilgan",
+      s: "25.09.2026 dan: chegara rejimi va o'tkazish punktidagi tartibni buzganlarni ham **sud qarorisiz 48 soatdan ortiq** ushlab turish mumkin emas (avval 3 sutkagacha, prokuror sanksiyasi bilan 10 sutkagacha ruxsat bor edi)." }
+  };
+
+  /* Figures used by calculators */
+  global.RULES = {
+    bhm: 440000, bhmNote: "2026-yil 1-sentabrdan (PF-115). O'zgarsa, yangi qiymatni kiriting.",
+    importNormUSD: 1000, minDaysAbroad: 3,
+    ybt: { now: { rate: 0.30, perKg: 3 }, y2027: { rate: 0.20, perKg: 2 } },
+    items: [
+      { k: 'alc', t: 'Alkogol (pivo ham)', max: 2, u: 'litr' },
+      { k: 'cig', t: 'Sigaret', max: 200, u: 'dona' },
+      { k: 'cigar', t: 'Sigara', max: 5, u: 'dona' },
+      { k: 'tob', t: 'Boshqa tamaki', max: 100, u: 'g' },
+      { k: 'perf', t: 'Atir va ifor suvi', max: 3, u: 'dona', note: 'jami 300 ml gacha' },
+      { k: 'phone', t: 'Mobil telefon', max: 2, u: 'dona', note: 'baribir YBDga yoziladi' },
+      { k: 'bfq', t: "BFQ (biologik faol qo'shimcha)", max: 10, u: 'nom', note: 'jami 3 kg gacha' }
+    ],
+    storage: { tiers: [{ from: 1, to: 5, p: 0.05 }, { from: 6, to: 15, p: 0.07 }, { from: 16, p: 0.10 }], perishable: 0.15, maxDays: 30, maxPerishable: 2 },
+    jewelry: { silver: 200, gold: 65, note: "PF-5721. Qo'shimcha: PF-185 (31.10.2023) bo'yicha qiymati 100 mln so'mgacha bo'lgan tayyor zargarlik buyumlari ham YBDsiz olib chiqiladi." },
+    exportNoDeclUSD: 5000, commercialBHM: 30,
+    cash: {
+      limit: 100000000,
+      defaultRates: { USD: 12200, EUR: 14300, RUB: 150 },
+      checkIn: function (uzs) {
+        if (uzs > this.limit) return { r: 'warn', t: 'YBD majburiy — "qizil" yo\'lak', d: "Olib kirish **cheklanmaydi**, lekin 100 mln so'mdan ortiq summa yo'lovchi bojxona deklaratsiyasida ko'rsatiladi {ref:VM-66}." };
+        return { r: 'ok', t: 'Deklaratsiyasiz olib kirish mumkin', d: "Summa 100 mln so'mdan oshmaydi. Olib kirish umuman cheklanmaydi {ref:VM-66}." };
+      },
+      checkOut: function (uzs) {
+        if (uzs > this.limit) return { r: 'bad', t: 'Rezident uchun ruxsat etilmaydi', d: "**Rezident** ko'pi bilan 100 mln so'm ekvivalentini olib chiqadi. **Norezident** esa undan ortig'ini faqat ilgari olib kirib, deklaratsiyada ko'rsatgan summa doirasida, YBD bilan olib chiqadi {ref:VM-66}." };
+        return { r: 'ok', t: 'Olib chiqish mumkin, YBD shart emas', d: "Summa 100 mln so'm ekvivalentidan oshmaydi {ref:VM-66}." };
+      }
+    }
+  };
+
+  global.GLOSSARY = [
+    ['BHM', "Bazaviy hisoblash miqdori. Jarima va to'lovlar unga nisbatan hisoblanadi. **2026-09-01 dan 440 000 so'm** {ref:PF-115}."],
+    ['BK', "Bojxona kodeksi (20.01.2016, O'RQ-400) — bojxona ishining asosiy qonuni."],
+    ['MJtK', "Ma'muriy javobgarlik to'g'risidagi kodeks — jarimalar, bayonnoma, ushlab turish tartibi."],
+    ['JPK', 'Jinoyat-protsessual kodeksi — jinoyat ishi bo\'yicha harakatlar (ko\'zdan kechirish, himoyachi, tarjimon).'],
+    ['VM', 'Vazirlar Mahkamasi (hukumat) qarori.'],
+    ['PF / PQ', "Prezident Farmoni / Prezident qarori."],
+    ["O'RQ", "O'zbekiston Respublikasi Qonuni."],
+    ['YBD', "Yo'lovchi bojxona deklaratsiyasi — yo'lovchi olib o'tayotgan tovar va pulni yozma (yoki elektron) e'lon qiladigan hujjat {ref:AV-2606}."],
+    ['YBT', "Yagona bojxona to'lovi — jismoniy shaxs me'yordan ortiq notijorat tovar uchun to'laydigan yagona to'lov (boj, QQS va boshqalar o'rniga) {ref:PQ-4508}."],
+    ['BYD', 'Bojxona yuk deklaratsiyasi — tijorat (yuk) tovarlari uchun deklaratsiya.'],
+    ['XBT', "Xavflarni boshqarish tizimi — kimni va nimani chuqurroq tekshirishni avtomatik tanlaydigan tizim (tanlab olish prinsipi) {ref:BK-189}."],
+    ['YaAAT', '"Bojxona qonunbuzarliklari" yagona avtomatlashtirilgan axborot tizimi — aniqlangan huquqbuzarliklar kiritiladi.'],
+    ['UZIMEI', "Mobil qurilmalarning IMEI kodlarini ro'yxatga olish tizimi. O'zbekistonda sotib olingan va ro'yxatdan o'tgan telefon deklaratsiya qilinmaydi."],
+    ['TIF', 'Tashqi iqtisodiy faoliyat (eksport, import, tranzit).'],
+    ['TIF TN', 'Tashqi iqtisodiy faoliyat tovar nomenklaturasi — har bir tovarning kodi.'],
+    ['Bojxona hududi', "Quruqlik, hududiy va ichki suvlar hamda ular ustidagi havo hududi {ref:BK-5}."],
+    ['Bojxona chegarasi', "Bojxona hududi sarhadlari va erkin bojxona zonalari hamda erkin omborlar perimetri {ref:BK-5}."],
+    ['Bojxona nazorati zonasi', "Bojxona hududining alohida ajratilgan va belgilangan qismi; u yerda faoliyat va harakat faqat bojxona ruxsati bilan {ref:BK-182}."],
+    ["Og'zaki so'rov", "Ma'lumotni og'zaki olish, natijasi yozilmaydi {ref:BK-191}."],
+    ["Ko'zdan kechiruv", "Ochmasdan, butligini buzmasdan tashqi tekshirish (skaner, it) {ref:BK-193}."],
+    ["Ko'rik", "Ochib tekshirish; plomba va muhr buzilishi mumkin {ref:BK-195}."],
+    ["Shaxsiy ko'rik", "Inson tanasi va kiyimini tekshirish — istisno shakl, yozma qaror va 2 xolis bilan {ref:BK-196}."],
+    ["Soddalashtirilgan shaxsiy ko'rik", "Tana skaneri orqali; qaror va bayonnoma kerak emas {ref:VM-700}."],
+    ['Xolis', "Holatni guvohi sifatida tasdiqlaydigan, ishdan manfaatdor bo'lmagan shaxs. Shaxsiy ko'rikda — ko'rikdan o'tuvchi bilan bir jinsli ikki xolis."],
+    ['Bayonnoma', "Harakat yoki huquqbuzarlik rasmiy qayd etiladigan hujjat {ref:MJtK-279}."],
+    ['Tilxat', "Shaxs o'z qo'li bilan yozib beradigan tasdiq (masalan, huquqlari tushuntirilgani haqida)."],
+    ["Yashil yo'lak", "Og'zaki deklaratsiya — me'yordan oshmagan tovarlar {ref:VM-814}."],
+    ["Qizil yo'lak", "Yozma deklaratsiya (YBD) — me'yordan ortiq, cheklangan yoki deklaratsiya shart bo'lgan tovarlar {ref:VM-814}."],
+    ['Masofaviy bojxona nazorati', "Ketish zonasida yo'lovchilarni kamera va ma'lumotlar orqali kuzatish; bojxonachi faqat qonunbuzarlik aniqlanganda chaqiriladi {ref:PF-122}."],
+    ["Bojsiz me'yor", "To'lovsiz olib kirish mumkin bo'lgan qiymat/miqdor: havo yo'lida 1 000$ {ref:VM-244}."],
+    ['Notijorat maqsad', "Shaxsiy, oilaviy, uy ehtiyoji uchun; sotish yoki biznes uchun emas."],
+    ['Tijorat maqsadi', "Sotish, ishlab chiqarish yoki biznes uchun; xususiyati, miqdori va takroriyligiga qarab aniqlanadi {ref:VM-281}."],
+    ['Rezident / norezident', "Rezident — O'zbekistonda doimiy yashovchi; norezident — chet elda doimiy yashovchi. Naqd valyuta qoidalari ular uchun farq qiladi {ref:VM-66}."],
+    ['Bojxona kirim orderi', "Jismoniy shaxsdan bojxona to'lovlarini undirishda rasmiylashtiriladigan hujjat."],
+    ["Ma'muriy ushlab turish", "Bayonnoma tuzish uchun qisqa muddatli ushlab turish — 3 soatgacha {ref:MJtK-285}."],
+    ['Vakolatli iqtisodiy operator', "Bojxona ishonchli deb tan olgan tadbirkor; soddalashtirilgan tartiblardan foydalanadi."],
+    ['Post Clearance', "Tovar chiqarilgandan keyingi bojxona nazorati; past xavfli tadbirkorlar uchun tez chiqarish evaziga keyin tekshirish {ref:PF-174}."],
+    ['AI-tahlil', "PF-174 bo'yicha 2028-yildan: tafovutni tizim aniqlab, tadbirkorga avtomatik xabar beradi va u ixtiyoriy tuzatadi {ref:PF-174}."],
+    ['Safe Customs', "PF-174 bo'yicha joriy etiladigan yagona raqamli axborot ekotizimi."],
+    ['Kelib chiqish sertifikati', "Tovar qaysi davlatda ishlab chiqarilganini tasdiqlovchi hujjat; imtiyozli boj stavkalari uchun kerak."],
+    ['Komplayens', "Xodimlar faoliyatining qonun va axloq qoidalariga mosligini ta'minlash tizimi (korrupsiyaga qarshi)."],
+    ['Bojxona qo\'mitasi', "Amaldagi rasmiy nomi: Iqtisodiyot va moliya vazirligi huzuridagi Bojxona qo'mitasi."]
+  ];
+})(window);
