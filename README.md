@@ -14,6 +14,7 @@ Telefon va Telegram bot (Mini App) uchun moslashtirilgan. Muallif: **Shakhobiddi
 | Testlar | Har modul oxirida mashq testi; PF-174 bo'limi testi (20 savol, 100 ball); **yakuniy test — 25 savol, 30 daqiqa, 100 ball** |
 | Baholash | 86–100 a'lo (5), 71–85 yaxshi (4), 56–70 qoniqarli (3), 0–55 qoniqarsiz (2) |
 | Ma'lumotnoma | Qonunlar kutubxonasi (52 havola, lex.uz bilan), atamalar lug'ati, butun qo'llanma bo'yicha qidiruv |
+| Valyuta kursi | Markaziy bankdan (cbu.uz) avtomatik olinadi, 6 soatda bir yangilanadi. Olinmasa oxirgi saqlangan kurs ("oflayn"), u ham bo'lmasa taxminiy zaxira kurs ishlatiladi |
 
 Huquqiy ma'lumotlar holati: **2026-yil 2-oktabr**. Rasmiy matnda tasdiqlanmagan bandlar
 qo'llanmada "Tekshirish tavsiya etiladi" belgisi bilan ajratilgan va testga kiritilmagan.
@@ -52,6 +53,7 @@ assets/js/app.js            — ekranlar, router, intro, darslar, testlar, serti
 assets/js/player.js         — "qalamda chizish" videodars dvigateli
 assets/js/widgets.js        — interaktiv vidjetlar va kalkulyatorlar
 assets/js/data-laws.js      — qonun havolalari, lug'at, kalkulyator raqamlari (RULES)
+assets/js/fx.js             — Markaziy bank valyuta kurslari (cbu.uz, 6 soatlik kesh)
 assets/js/data-modules.js   — 9 ta asosiy modul va o'yinlar ma'lumoti
 assets/js/data-pf174.js     — PF-174 bo'limi
 assets/js/data-videos.js    — videodarslar ssenariysi

@@ -237,11 +237,12 @@
         barRow(Math.round(c.y.rate * 100) + '% × ' + usd(c.excess), c.byRate, c.byRate >= c.byKg),
         barRow(usd(c.y.perKg) + ' × ' + U.num(c.kgEx, 1) + ' kg', c.byKg, c.byKg > c.byRate),
         st.alc ? h('div.calc-line', null, h('span', 'Alkogol/tamaki — ikki baravar'), h('b', '× 2')) : null,
-        h('div.row-between', { style: 'margin-top:8px' }, h('span.bold', 'Yagona bojxona to\'lovi'), h('span.calc-total', usd(c.pay))));
+        h('div.row-between', { style: 'margin-top:8px' }, h('span.bold', 'Yagona bojxona to\'lovi'), h('span.calc-total', usd(c.pay))),
+        h('div.calc-line.fx-line', null, h('span', 'So\'mda (1 USD = ' + U.num(FX.rate('USD'), 2) + ' so\'m)'), h('b', '≈ ' + som(c.pay * FX.rate('USD')))));
     }
     function upd() {
       out.innerHTML = '';
-      if (st.compare) { out.appendChild(h('div.stack', null, block('now', 'Hozirgi tartib (' + Math.round(rules.ybt.now.rate * 100) + '%, ' + usd(rules.ybt.now.perKg) + '/kg)'), block('y2027', '2027-yil 1-yanvardan (' + Math.round(rules.ybt.y2027.rate * 100) + '%, ' + usd(rules.ybt.y2027.perKg) + '/kg)'))); const a = calcFor('now').pay, b = calcFor('y2027').pay; if (a > b) out.appendChild(result('ok', 'Tejash: ' + usd(a - b), 'PF-174 farmoni 8-bandiga ko\'ra yo\'lovchi shu holatda ' + Math.round((1 - b / a) * 100) + '% kam to\'laydi.')); }
+      if (st.compare) { out.appendChild(h('div.stack', null, block('now', 'Hozirgi tartib (' + Math.round(rules.ybt.now.rate * 100) + '%, ' + usd(rules.ybt.now.perKg) + '/kg)'), block('y2027', '2027-yil 1-yanvardan (' + Math.round(rules.ybt.y2027.rate * 100) + '%, ' + usd(rules.ybt.y2027.perKg) + '/kg)'))); const a = calcFor('now').pay, b = calcFor('y2027').pay; if (a > b) out.appendChild(result('ok', 'Tejash: ' + usd(a - b) + ' (≈ ' + som((a - b) * FX.rate('USD')) + ')', 'PF-174 farmoni 8-bandiga ko\'ra yo\'lovchi shu holatda ' + Math.round((1 - b / a) * 100) + '% kam to\'laydi.')); }
       else out.appendChild(block(st.per, st.per === 'now' ? 'Hozirgi tartib' : '2027-yil 1-yanvardan'));
     }
     const perSeg = seg([['now', 'Hozir'], ['y2027', '2027-yildan'], ['cmp', 'Solishtirish']], st.compare ? 'cmp' : st.per, function (v) { if (v === 'cmp') st.compare = true; else { st.compare = false; st.per = v; } upd(); });
@@ -252,10 +253,13 @@
       numField('Tovarlarning umumiy qiymati', st.val, 'USD', 'Havo transportida bojsiz me\'yor: ' + usd(rules.importNormUSD), function (v) { st.val = v; upd(); }),
       numField('Umumiy og\'irligi', st.kg, 'kg', null, function (v) { st.kg = v; upd(); }),
       alcRow, out,
-      h('div.tiny.faint', '* O\'quv modeli: ortiqcha qism og\'irligi qiymatga mutanosib olinadi. Amalda xodim me\'yordan ortgan aniq tovarlarning qiymati va og\'irligi bo\'yicha hisoblaydi. To\'lov ikki usulda hisoblanib, kattasi olinadi.')
+      FX.badge(),
+      h('div.tiny.faint', '* O\'quv modeli: ortiqcha qism og\'irligi qiymatga mutanosib olinadi. Amalda xodim me\'yordan ortgan aniq tovarlarning qiymati va og\'irligi bo\'yicha hisoblaydi. To\'lov ikki usulda hisoblanib, kattasi olinadi. So\'mdagi summa Markaziy bankning joriy kursi bo\'yicha taxminiy ko\'rsatiladi.')
     ];
     upd();
-    return card('calc', o.head || 'Yagona bojxona to\'lovi kalkulyatori', o.sub || 'Jismoniy shaxslar, notijorat maqsad, havo transporti', body);
+    const el = card('calc', o.head || 'Yagona bojxona to\'lovi kalkulyatori', o.sub || 'Jismoniy shaxslar, notijorat maqsad, havo transporti', body);
+    FX.watch(el, upd);
+    return el;
   };
 
   /* ---------- 10. Allowance checker (alcohol, cigarettes, phones) ---------- */
@@ -313,26 +317,53 @@
   /* ---------- 12. Currency checker ---------- */
   W.currency = function (o) {
     const rules = R().cash;
-    const st = { dir: 'out', cur: 'USD', amt: 5000, rate: rules.defaultRates.USD };
+    const MAIN = ['USD', 'EUR', 'RUB'];
+    const POPULAR = ['GBP', 'CNY', 'KZT', 'TRY', 'AED', 'JPY', 'KRW', 'CHF', 'KGS', 'TJS', 'SAR', 'INR'];
+    const st = { dir: 'out', cur: 'USD', other: 'GBP', amt: 5000, rate: 0, manual: false };
     const out = h('div');
-    const rateField = numField('1 birlik kursi (Markaziy bank)', st.rate, 'so\'m', 'Taxminiy qiymat — joriy MB kursini kiriting', function (v) { st.rate = v; upd(); });
+    const rateField = numField('1 USD kursi', '', 'so\'m', null, function (v) { st.rate = v; st.manual = true; upd(); });
+    const rateIn = rateField.querySelector('input'), rateLabel = rateField.querySelector('label');
+    const resetBtn = h('button.fx-reset', { type: 'button', html: IC('replay', 13) + ' Markaziy bank kursiga qaytarish', onclick: function () { st.manual = false; syncRate(); upd(); } });
+    const rateHint = h('div.hint', null, FX.badge(), resetBtn);
+    rateField.appendChild(rateHint);
+    const otherSel = h('select.input.fx-select', { 'aria-label': 'Boshqa valyuta' });
+    otherSel.addEventListener('change', function () { st.other = st.cur = otherSel.value; st.manual = false; syncRate(); upd(); });
+    const otherWrap = h('div.field', null, h('label', 'Valyutani tanlang'), otherSel);
+
+    function fillOther() {
+      const codes = FX.codes().filter(function (c) { return MAIN.indexOf(c) < 0 && c !== 'UZS'; });
+      const ordered = POPULAR.filter(function (c) { return codes.indexOf(c) >= 0; }).concat(codes.filter(function (c) { return POPULAR.indexOf(c) < 0; }));
+      if (ordered.indexOf(st.other) < 0 && ordered.length) st.other = ordered[0];
+      otherSel.innerHTML = '';
+      ordered.forEach(function (c) { const nm = FX.name(c); otherSel.appendChild(h('option', { value: c }, c + (nm ? ' — ' + nm : ''))); });
+      otherSel.value = st.other;
+    }
+    function fmtRate(v) { return v >= 100 ? Math.round(v * 100) / 100 : Math.round(v * 10000) / 10000; }
+    function syncRate() { if (st.cur === 'UZS' || st.manual) return; st.rate = fmtRate(FX.rate(st.cur)); rateIn.value = st.rate; }
     function upd() {
       out.innerHTML = '';
-      const uzs = st.cur === 'UZS' ? st.amt : st.amt * st.rate;
-      rateField.style.display = st.cur === 'UZS' ? 'none' : '';
-      const eq = h('div.calc-line', null, h('span', 'So\'mdagi ekvivalenti'), h('b', som(uzs)));
-      let res;
-      if (st.dir === 'in') res = rules.checkIn(uzs);
-      else res = rules.checkOut(uzs);
-      out.appendChild(h('div.stack', null, h('div.card.flat.tight', null, eq), result(res.r, res.t, res.d)));
+      const isUzs = st.cur === 'UZS';
+      rateField.style.display = isUzs ? 'none' : '';
+      otherWrap.style.display = !isUzs && MAIN.indexOf(st.cur) < 0 ? '' : 'none';
+      rateLabel.textContent = '1 ' + st.cur + ' kursi';
+      resetBtn.style.display = st.manual ? '' : 'none';
+      const uzs = isUzs ? st.amt : st.amt * st.rate;
+      const lines = [h('div.calc-line', null, h('span', 'So\'mdagi ekvivalenti'), h('b', som(uzs)))];
+      if (!isUzs && st.rate > 0) lines.push(h('div.calc-line', null, h('span', '100 mln so\'m chegarasi'), h('b', '≈ ' + U.num(Math.floor(rules.limit / st.rate)) + ' ' + st.cur)));
+      const res = st.dir === 'in' ? rules.checkIn(uzs) : rules.checkOut(uzs);
+      out.appendChild(h('div.stack', null, h('div.card.flat.tight', null, lines), result(res.r, res.t, res.d)));
     }
     const body = [
       seg([['in', 'Olib kirish'], ['out', 'Olib chiqish']], st.dir, function (v) { st.dir = v; upd(); }),
-      seg([['USD', 'USD'], ['EUR', 'EUR'], ['RUB', 'RUB'], ['UZS', 'So\'m']], st.cur, function (v) { st.cur = v; if (v !== 'UZS') { st.rate = rules.defaultRates[v]; rateField.querySelector('input').value = st.rate; } upd(); }),
+      seg([['USD', 'USD'], ['EUR', 'EUR'], ['RUB', 'RUB'], ['other', 'Boshqa'], ['UZS', 'So\'m']], st.cur, function (v) { st.cur = v === 'other' ? st.other : v; st.manual = false; syncRate(); upd(); }),
+      otherWrap,
       numField('Naqd pul miqdori', st.amt, '', null, function (v) { st.amt = v; upd(); }),
       rateField, out];
-    upd();
-    return card('cash', o.head || 'Naqd valyuta: deklaratsiya kerakmi?', o.sub || 'Jismoniy shaxs, aeroport', body);
+    fillOther(); syncRate(); upd();
+    const el = card('cash', o.head || 'Naqd valyuta: deklaratsiya kerakmi?', o.sub || 'Jismoniy shaxs, aeroport', body);
+    // fresh Central Bank rates arrive -> refill the list and recalculate
+    FX.watch(el, function () { fillOther(); syncRate(); upd(); });
+    return el;
   };
 
   /* ---------- 13. Jewellery export checker ---------- */

@@ -15,6 +15,7 @@
     init: function () {
       Store.load();
       TG.init();
+      if (global.FX) FX.init();
       this.applySettings();
       const self = this;
       TG.onBack = function () { self.handleBack(); };
@@ -95,6 +96,19 @@
       this.render(st.p || '', dir);
     },
     syncBack: function () { TG.back(UI.overlays.length > 0 || ROOTS.indexOf(this.path) < 0); },
+    // jump straight to the home screen from anywhere (e.g. mid-lesson).
+    // Rewinds the history stack so "back" on home doesn't reopen the lesson.
+    home: function (note) {
+      if (this.path === '') return;
+      const self = this;
+      if (this.guard) { this.guard(function () { self.guard = null; self.home(note); }); return; }
+      UI.overlays.slice().forEach(function (c) { c(); });
+      if (this.depth > 0) {
+        history.go(-this.depth);
+        setTimeout(function () { if (self.path !== '') { self.depth = 0; self.go('', { replace: true, dir: 'back', force: true }); } }, 450);
+      } else this.go('', { replace: true, dir: 'back', force: true });
+      if (note) setTimeout(function () { UI.toast(note); }, 250);
+    },
 
     render: function (p, dir) {
       const app = document.getElementById('app');
@@ -170,8 +184,13 @@
     return h('header.topbar', null,
       opts.noBack ? null : h('button.icon-btn.tg-hide', { 'aria-label': 'Orqaga', html: IC('left', 20), onclick: function () { App.handleBack(); } }),
       h('div.grow', null, sub ? h('div.sub', sub) : null, h('h1', title)),
-      opts.right || null);
+      opts.right || null,
+      opts.home ? homeBtn(opts.home === true ? null : opts.home) : null);
   }
+  function homeBtn(note, cls) {
+    return h('button.icon-btn' + (cls || ''), { 'aria-label': 'Bosh sahifaga qaytish', title: 'Bosh sahifa', html: IC('home', 20), onclick: function () { App.home(note); } });
+  }
+  const SAVED_NOTE = 'Joyingiz saqlandi — "Davom etish" bilan qaytasiz';
 
   /* ---------------- progress helpers ---------------- */
   function modPct(m) {
@@ -410,7 +429,7 @@
     const pct = modPct(m);
     const started = (st.s || []).length > 0;
     const hero = h('div.hero.colored.on-navy', { vars: modStyle(m) },
-      h('div.row', null, h('button.icon-btn.on-dark.tg-hide', { 'aria-label': 'Orqaga', html: IC('left', 20), onclick: function () { App.handleBack(); } }), h('div.grow'), m.isNew ? h('span.pill.on-dark', 'Yangi') : null),
+      h('div.row', null, h('button.icon-btn.on-dark.tg-hide', { 'aria-label': 'Orqaga', html: IC('left', 20), onclick: function () { App.handleBack(); } }), h('div.grow'), m.isNew ? h('span.pill.on-dark', 'Yangi') : null, homeBtn(null, '.on-dark')),
       h('div.row', { style: 'margin-top:14px;align-items:flex-start;gap:14px' },
         h('div.grow', null, h('div.eyebrow', m.n ? m.n + '-modul' : 'Maxsus bo\'lim'), h('h2', m.title), h('p', m.short)),
         UI.ring(pct, 68, 7, '<span style="font-size:1rem">' + pct + '%</span>', '#ffffff', '#e0f2fe')),
@@ -455,7 +474,8 @@
     const seg = h('div.segbar', { vars: modStyle(m) }, m.steps.map(function (_, i) { return h('i' + (i <= idx ? '.on' : '')); }));
     const top = h('header.topbar.lesson-top', null,
       h('button.icon-btn', { 'aria-label': 'Darsni yopish', html: IC('x', 20), onclick: function () { App.go('m/' + m.id, { replace: true, dir: 'back' }); } }),
-      seg, h('div.small.bold.muted.nowrap', (idx + 1) + '/' + m.steps.length));
+      seg, h('div.small.bold.muted.nowrap', (idx + 1) + '/' + m.steps.length),
+      homeBtn(SAVED_NOTE));
     const content = h('div.pad.stack-lg', { vars: modStyle(m) },
       h('div', null, h('div.step-kicker', { html: IC(step.i || m.icon, 14) + ' ' + esc(step.k || (m.n ? m.n + '-modul' : 'PF-174')) }), h('h2.step-title', step.t)));
     if (step.video) content.appendChild(videoBlock(step.video, function () { next(); }));
@@ -589,7 +609,8 @@
     list.forEach(function () { seg.appendChild(h('i')); });
     const top = h('header.topbar.lesson-top', null,
       h('button.icon-btn', { 'aria-label': 'Testni yopish', html: IC('x', 20), onclick: function () { App.handleBack(); } }), seg,
-      h('div.small.bold.muted.nowrap', { id: 'qcount' }, ''));
+      h('div.small.bold.muted.nowrap', { id: 'qcount' }, ''),
+      homeBtn());
     const content = h('div.pad.stack', { vars: modStyle(m) });
     const scroll = h('div.scroll', null, content);
     const btn = h('button.btn', { vars: modStyle(m), style: 'background:linear-gradient(135deg,var(--c1),var(--c2))', disabled: true });
@@ -896,16 +917,37 @@
   ];
   App.TOOLS = TOOLS;
 
+  /* live Central Bank rates (assets/js/fx.js) */
+  function fxCard() {
+    const grid = h('div.fx-grid');
+    function draw() {
+      grid.innerHTML = '';
+      ['USD', 'EUR', 'RUB'].forEach(function (c) {
+        const v = FX.rate(c), d = FX.isLive(c) ? (FX.diff[c] || 0) : 0;
+        grid.appendChild(h('button.fx-cell', { type: 'button', 'aria-label': '1 ' + c + ' = ' + U.num(v, 2) + ' so\'m', onclick: function () { App.go('t/currency'); } },
+          h('span.fx-c', c),
+          h('b', U.num(v, 2)),
+          d ? h('span.fx-d.' + (d > 0 ? 'up' : 'down'), (d > 0 ? '▲ +' : '▼ ') + U.num(d, 2)) : h('span.fx-d', 'so\'m')));
+      });
+    }
+    const el = h('div.card.fx-card', null,
+      h('div.fx-head', null, h('div.tile.sm', { vars: { '--c1': '#22c55e', '--c2': '#059669' }, html: IC('coins', 18) }), h('div.grow', null, h('div.t', 'Valyuta kurslari'), h('div.s', 'Markaziy bank · 1 birlik uchun so\'m'))),
+      grid, FX.badge());
+    FX.watch(el, draw); draw();
+    return el;
+  }
+
   Screens.tools = function () {
     const body = h('div.pad.stack-lg.reveal');
+    body.appendChild(h('div', { style: '--i:0' }, fxCard()));
     const list = h('div.list');
     TOOLS.forEach(function (t) { list.appendChild(h('button.list-row', { vars: { '--c1': t.c1, '--c2': t.c2 }, onclick: function () { App.go('t/' + t.id); } }, h('div.tile.sm', { html: IC(t.i, 18) }), h('div.grow', null, h('div.t', t.t), h('div.s', t.s)), h('span.chev', { html: IC('right', 16) }))); });
-    body.appendChild(h('div', { style: '--i:0' }, h('div.section-label', 'Kalkulyator va mashqlar'), list));
+    body.appendChild(h('div', { style: '--i:1' }, h('div.section-label', 'Kalkulyator va mashqlar'), list));
     const list2 = h('div.list');
     [['videos', 'video', 'Videodarslar', 'Qalamda chizilgan tushuntirishlar', '#ef4444', '#f97316'], ['laws', 'scale', 'Qonunlar kutubxonasi', 'Hujjatlar va moddalar — oddiy tilda', '#0ea5e9', '#2563eb'], ['glossary', 'book', 'Atamalar lug\'ati', 'YBD, YBT, XBT, BHM va boshqalar', '#8b5cf6', '#6366f1'], ['review', 'refresh', 'Takrorlash', 'Xato qilingan savollar', '#f59e0b', '#ea580c'], ['search', 'search', 'Qidiruv', 'Butun qo\'llanma bo\'ylab', '#64748b', '#334155']].forEach(function (x) {
       list2.appendChild(h('button.list-row', { vars: { '--c1': x[4], '--c2': x[5] }, onclick: function () { App.go(x[0]); } }, h('div.tile.sm', { html: IC(x[1], 18) }), h('div.grow', null, h('div.t', x[2]), h('div.s', x[3])), h('span.chev', { html: IC('right', 16) })));
     });
-    body.appendChild(h('div', { style: '--i:1' }, h('div.section-label', 'Ma\'lumotnoma'), list2));
+    body.appendChild(h('div', { style: '--i:2' }, h('div.section-label', 'Ma\'lumotnoma'), list2));
     return { el: h('div', null, topbar('Vositalar', 'Amaliy yordamchilar', { noBack: true, right: h('button.icon-btn', { 'aria-label': 'Sozlamalar', html: IC('settings', 20), onclick: function () { App.go('settings'); } }) }), h('div.scroll', null, body)), tabs: true };
   };
 
@@ -939,7 +981,7 @@
       videoBlock(vid, m ? function () { App.go('l/' + m.id + '/' + Math.min(1, m.steps.length - 1)); } : null),
       h('div.card.flat', null, h('div.blk-head', { html: IC('info', 14) + ' Qanday ko\'rish kerak' }), h('p.p', 'Ekranga bosib pauza qiling, pastdagi chiziq bo\'yicha istalgan sahnaga o\'ting. "CC" — subtitrlar, "1×" — tezlik, burchakdagi tugma — to\'liq ekran.')),
       m ? h('button.btn.block.secondary', { vars: modStyle(m), onclick: function () { App.go('m/' + m.id); }, html: IC('book', 18) + ' "' + esc(m.title) + '" moduliga o\'tish' }) : null);
-    return { el: h('div', null, topbar(v.title, 'Videodars'), h('div.scroll', null, body)) };
+    return { el: h('div', null, topbar(v.title, 'Videodars', { home: true }), h('div.scroll', null, body)) };
   };
 
   /* ---------- Search ---------- */

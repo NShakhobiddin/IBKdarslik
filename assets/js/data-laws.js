@@ -148,7 +148,8 @@
     exportNoDeclUSD: 5000, commercialBHM: 30,
     cash: {
       limit: 100000000,
-      defaultRates: { USD: 12200, EUR: 14300, RUB: 150 },
+      // Faqat zaxira: asosiy kurs Markaziy bankdan (cbu.uz) avtomatik olinadi — assets/js/fx.js
+      defaultRates: { USD: 12650, EUR: 13660, RUB: 139, GBP: 16070, CNY: 1770, TRY: 380, AED: 3445 },
       checkIn: function (uzs) {
         if (uzs > this.limit) return { r: 'warn', t: 'YBD majburiy — "qizil" yo\'lak', d: "Olib kirish **cheklanmaydi**, lekin 100 mln so'mdan ortiq summa yo'lovchi bojxona deklaratsiyasida ko'rsatiladi {ref:VM-66}." };
         return { r: 'ok', t: 'Deklaratsiyasiz olib kirish mumkin', d: "Summa 100 mln so'mdan oshmaydi. Olib kirish umuman cheklanmaydi {ref:VM-66}." };
