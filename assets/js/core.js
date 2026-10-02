@@ -257,7 +257,7 @@
   /* ---------------- Storage ---------------- */
   const KEY = 'ibk-qollanma-v2';
   function fresh() {
-    return { v: 2, ts: 0, intro: 0, name: '', set: { theme: 'auto', fs: 1, motion: 'auto', voice: 0, cc: 1, bhm: 0 }, mods: {}, xp: 0, days: [], wrong: {}, exam: [], vids: {}, run: null };
+    return { v: 2, ts: 0, intro: 0, name: '', first: '', set: { theme: 'auto', fs: 1, motion: 'auto', voice: 0, cc: 1, bhm: 0 }, mods: {}, xp: 0, days: [], wrong: {}, exam: [], vids: {}, run: null };
   }
   const Store = {
     d: fresh(),

@@ -207,57 +207,143 @@
   };
 
   /* ---------- Home ---------- */
-  Screens.home = function () {
+  function greetWord() {
+    const hr = new Date().getHours();
+    if (hr >= 5 && hr < 11) return 'Xayrli tong';
+    if (hr >= 11 && hr < 17) return 'Xayrli kun';
+    if (hr >= 17 && hr < 23) return 'Xayrli kech';
+    return 'Assalomu alaykum';
+  }
+  // given name for the greeting: Telegram first name, the name typed in the intro,
+  // or the "Familiya Ism" saved for the certificate (second word = ism)
+  function givenName() {
+    const u = TG.user(); if (u && u.first_name) return u.first_name;
+    if (Store.d.first) return Store.d.first;
+    const parts = String(Store.d.name || '').trim().split(/\s+/).filter(Boolean);
+    if (parts.length < 2) return parts[0] || '';
+    const sur = /(ov|ova|ev|eva|yev|yeva|zoda|zade|ovich|ovna)$/i;
+    if (sur.test(parts[0]) && !sur.test(parts[1])) return parts[1];
+    if (sur.test(parts[1]) && !sur.test(parts[0])) return parts[0];
+    return parts[1];
+  }
+  function fullName() {
     const u = TG.user();
-    const name = Store.d.name || (u ? [u.first_name, u.last_name].filter(Boolean).join(' ') : '');
-    const first = name ? name.split(' ')[0] : '';
+    return Store.d.name || (u ? [u.first_name, u.last_name].filter(Boolean).join(' ') : '') || Store.d.first || '';
+  }
+
+  Screens.home = function () {
+    const first = givenName(), name = fullName();
     const pct = overallPct();
     const ms = MODS();
     const doneN = ms.filter(function (m) { return modPct(m) >= 100 || (Store.d.mods[m.id] && Store.d.mods[m.id].done); }).length;
     const streak = Store.streak();
     const wrongN = Object.keys(Store.d.wrong || {}).length;
+    const lp = lastPlace();
+    const ex = Store.d.exam || [];
+    const fresh = !lp && !(Store.d.xp > 0) && !ex.length;
+    const totalSteps = ms.reduce(function (a, m) { return a + m.steps.length; }, 0);
+    const nVid = Object.keys(global.VIDEOS || {}).length;
 
-    const xpEl = h('b', '0'), stEl = h('b', String(streak));
-    const hero = h('div.hero.on-navy', null,
-      h('div.hello', null,
-        h('div.avatar', name ? U.initials(name) : raw(IC('shield', 22))),
-        h('div.grow', null, h('div.eyebrow', 'Toshkent-AERO IBK'), h('h2', first ? 'Assalomu alaykum, ' + first + '!' : 'Assalomu alaykum!')),
-        h('button.icon-btn.on-dark', { 'aria-label': 'Sozlamalar', html: IC('settings', 20), onclick: function () { App.go('settings'); } })),
-      h('div.stats', null,
-        UI.ring(pct, 64, 7, '<span style="font-size:1.05rem" aria-label="O\'zlashtirildi ' + pct + '%">' + pct + '%</span>', '#5eead4', '#60a5fa'),
-        h('div.stat-grid', null,
-          h('div.stat', null, h('b', doneN + '/' + ms.length), h('span', 'modul')),
-          h('div.stat', null, xpEl, h('span', 'XP ball')),
-          h('div.stat', null, stEl, h('span', streak === 1 ? 'kun ketma-ket' : 'kun ketma-ket')))),
-      h('button.searchbox', { onclick: function () { App.go('search'); } }, raw(IC('search', 18)), 'Qoida, modda yoki atamani qidiring…'));
-    setTimeout(function () { UI.countUp(xpEl, Store.d.xp || 0, 900); }, 200);
+    const hello = h('div.hello', null,
+      h('div.avatar', name ? U.initials(name) : raw(IC('shield', 22))),
+      h('div.grow', null, h('div.eyebrow', 'Toshkent-AERO IBK'), h('h2', greetWord() + (first ? ', ' + first : '') + '!')),
+      h('button.icon-btn.on-dark', { 'aria-label': 'Sozlamalar', html: IC('settings', 20), onclick: function () { App.go('settings'); } }));
+    const search = h('button.searchbox', { onclick: function () { App.go('search'); } }, raw(IC('search', 18)), 'Qoida, modda yoki atamani qidiring…');
+    let hero;
+    if (fresh) {
+      const fact = function (ic, n, label) { return h('div.fact', null, h('span.fi', { html: IC(ic, 16) }), h('b', String(n)), h('span', label)); };
+      hero = h('div.hero.on-navy', null, hello,
+        h('p.hero-lead', 'Bojxona qoidalarini oddiy tilda, misollar va videodarslar bilan qadamma-qadam o\'rganing.'),
+        h('div.facts', null,
+          fact('layers', ms.length, 'modul'),
+          fact('listc', totalSteps, 'dars'),
+          fact('video', nVid, 'videodars'),
+          fact('award', EXAM_N, 'savollik test')),
+        search);
+    } else {
+      const xpEl = h('b', '0');
+      const lead = pct >= 100 ? 'Kurs to\'liq o\'zlashtirildi. Yakuniy testda kuchingizni sinang!'
+        : pct > 0 ? 'Kursning ' + pct + '% qismi o\'zlashtirildi. Davom etamiz!'
+        : 'Yaxshi boshlanish! Bugun yana bir qadam qo\'yamiz.';
+      hero = h('div.hero.on-navy', null, hello,
+        h('p.hero-lead', lead),
+        h('div.stats', null,
+          UI.ring(pct, 64, 7, '<span style="font-size:1.05rem" aria-label="O\'zlashtirildi ' + pct + '%">' + pct + '%</span>', '#5eead4', '#60a5fa'),
+          h('div.stat-grid', null,
+            h('div.stat', null, h('b', doneN + '/' + ms.length), h('span', 'modul')),
+            h('div.stat', null, xpEl, h('span', 'XP ball')),
+            h('div.stat', null, h('b', null, String(streak), streak > 0 ? h('i.flame', { html: IC('flame', 14) }) : null), h('span', 'kun ketma-ket')))),
+        search);
+      setTimeout(function () { UI.countUp(xpEl, Store.d.xp || 0, 900); }, 200);
+    }
 
     const body = h('div.pad.stack-lg.reveal');
-    // continue
-    const lp = lastPlace();
-    if (lp) {
-      const m = lp.m, idx = Math.min(lp.st.last || 0, m.steps.length - 1);
-      body.appendChild(h('div', { style: '--i:0' }, h('div.section-label', 'Davom eting'),
-        h('button.card.continue-card', { style: 'width:100%;text-align:left', vars: modStyle(m), onclick: function () { App.go('l/' + m.id + '/' + idx); } },
-          h('div.tile', { html: IC(m.icon, 22) }),
-          h('div.grow', null, h('div.small.muted.bold', m.n ? m.n + '-modul' : 'Maxsus bo\'lim'), h('div.card-title', m.title), h('div.small.muted', { style: 'margin:2px 0 8px' }, (idx + 1) + '-qadam: ' + m.steps[idx].t), UI.bar(modPct(m), m.c1, m.c2)),
-          raw(IC('right', 20)))));
+    let k = 0;
+    const add = function (el) { el.style.setProperty('--i', k++); body.appendChild(el); return el; };
+
+    if (fresh) {
+      // 1) one obvious first action
+      const m0 = ms[0];
+      if (m0) {
+        const meta = function (ic, t) { return h('span.sc-chip', { html: IC(ic, 13) + ' ' + t }); };
+        add(h('div', null, h('div.section-label', 'Shu yerdan boshlang'),
+          h('div.start-card', { vars: modStyle(m0) },
+            h('div.sc-top', null,
+              h('div.tile.lg', { html: IC(m0.icon, 26) }),
+              h('div.grow', null, h('div.sc-k', '1-modul'), h('div.sc-t', m0.title))),
+            h('p.sc-d', m0.short),
+            h('div.sc-meta', null,
+              meta('listc', m0.steps.length + ' qadam'),
+              m0.mins ? meta('clock', '≈ ' + m0.mins + ' daqiqa') : null,
+              m0.video ? meta('video', 'videodars') : null),
+            h('button.btn.block.sc-go', { onclick: function () { App.go('l/' + m0.id + '/0'); }, html: IC('play', 18) + ' Birinchi darsni boshlash' }))));
+      }
+      // 2) how the course works
+      const steps = [
+        ['book', '#14b8a6', '#0ea5e9', 'O\'qing va tomosha qiling', 'Har qadam oddiy tilda: hayotiy misol, "Eslab qoling" va qalamda chizilgan videodars.'],
+        ['target', '#f59e0b', '#ea580c', 'Mashq qiling', 'Har darsdan keyin savol, modul oxirida mashq testi. Xatolar "Takrorlash" bo\'limiga yig\'iladi.'],
+        ['award', '#e11d48', '#7c3aed', 'Yakuniy testni topshiring', EXAM_N + ' savol, ' + EXAM_MIN + ' daqiqa, 100 ball. 56 va undan yuqori ball — o\'tdi. Natijangiz bilan o\'quv sertifikati olasiz.']
+      ];
+      add(h('div', null, h('div.section-label', 'Qanday o\'qiladi?'),
+        h('div.card.roadmap', null, steps.map(function (s, i) {
+          return h('div.rm-step', null,
+            h('div.rm-dot', { vars: { '--c1': s[1], '--c2': s[2] } }, h('span', { html: IC(s[0], 18) }), h('i', String(i + 1))),
+            h('div.grow', null, h('b', s[3]), h('p', s[4])));
+        }))));
+    } else if (lp) {
+      const m = lp.m, idx = Math.min(lp.st.last || 0, m.steps.length - 1), mp = modPct(m);
+      add(h('div', null, h('div.section-label', 'Davom eting'),
+        h('div.start-card', { vars: modStyle(m) },
+          h('button.sc-top', { style: 'width:100%;text-align:left', onclick: function () { App.go('m/' + m.id); } },
+            h('div.tile.lg', { html: IC(m.icon, 26) }),
+            h('div.grow', null, h('div.sc-k', m.n ? m.n + '-modul · ' + mp + '%' : 'Maxsus bo\'lim · ' + mp + '%'), h('div.sc-t', m.title)),
+            raw(IC('right', 20))),
+          UI.bar(mp, m.c1, m.c2),
+          h('div.sc-next', null, h('span.small.muted.bold', (idx + 1) + '/' + m.steps.length + '-qadam'), h('div.bold', m.steps[idx].t)),
+          h('button.btn.block.sc-go', { onclick: function () { App.go('l/' + m.id + '/' + idx); }, html: IC('play', 18) + ' Davom etish' }))));
     } else {
       const m0 = ms[0];
-      if (m0) body.appendChild(h('div', { style: '--i:0' }, h('button.card.continue-card', { style: 'width:100%;text-align:left', vars: modStyle(m0), onclick: function () { App.go('m/' + m0.id); } },
+      if (m0) add(h('button.card.continue-card', { style: 'width:100%;text-align:left', vars: modStyle(m0), onclick: function () { App.go('m/' + m0.id); } },
         h('div.tile.lg', { html: IC('rocket', 26) }),
         h('div.grow', null, h('div.card-title', 'O\'qishni boshlang'), h('div.small.muted', '1-moduldan boshlash tavsiya etiladi: asosiy tushunchalar va nazorat shakllari.')),
-        raw(IC('right', 20)))));
+        raw(IC('right', 20))));
+    }
+    // mistakes to review
+    if (!fresh && wrongN > 0) {
+      add(h('button.card.continue-card.review-card', { style: 'width:100%;text-align:left', onclick: function () { App.go('review'); } },
+        h('div.tile', { vars: { '--c1': '#f59e0b', '--c2': '#ea580c' }, html: IC('refresh', 22) }),
+        h('div.grow', null, h('div.card-title', wrongN + ' ta savolni takrorlang'), h('div.small.muted', 'Xato qilingan savollar — 2 daqiqalik mashq.')),
+        raw(IC('right', 20))));
     }
     // PF-174 feature
     const pf = modById('pf174');
-    if (pf) body.appendChild(h('div', { style: '--i:1' }, h('button.feature', { onclick: function () { App.go('m/pf174'); } },
+    if (pf) add(h('button.feature', { onclick: function () { App.go('m/pf174'); } },
       h('span.pill.new', { html: IC('sparkles', 12) + ' Yangi farmon' }),
       h('h3', 'PF-174: "Yangi O\'zbekiston bojxonasi — 2030"'),
       h('p', 'Prezidentning 2026-yil 27-avgustdagi farmoni qadamma-qadam: nima o\'zgaradi, qachondan va kimga taalluqli. Bo\'lim oxirida test bor.'),
-      h('div.row', { style: 'margin-top:12px;gap:8px' }, h('span.pill.on-dark', { html: IC('video', 12) + ' Videodars' }), h('span.pill.on-dark', { html: IC('listc', 12) + ' ' + pf.steps.length + ' qadam' }), h('span.pill.on-dark', { html: IC('award', 12) + ' 100 ballik test' })))));
+      h('div.row', { style: 'margin-top:12px;gap:8px' }, h('span.pill.on-dark', { html: IC('video', 12) + ' Videodars' }), h('span.pill.on-dark', { html: IC('listc', 12) + ' ' + pf.steps.length + ' qadam' }), h('span.pill.on-dark', { html: IC('award', 12) + ' 100 ballik test' }))));
     // quick tools
-    body.appendChild(h('div', { style: '--i:2' }, h('div.section-label', 'Tezkor vositalar'),
+    add(h('div', null, h('div.section-label', 'Tezkor vositalar'),
       h('div.quick', null,
         quickBtn('video', 'Video-darslar', '#ef4444', '#f97316', function () { App.go('videos'); }),
         quickBtn('calc', 'Kalkulyator', '#10b981', '#0d9488', function () { App.go('t/import'); }),
@@ -268,18 +354,17 @@
     // modules preview
     const box = h('div.list');
     ms.slice(0, 4).forEach(function (m) { box.appendChild(modRow(m)); });
-    body.appendChild(h('div', { style: '--i:3' }, h('div.section-label', null, 'Modullar', h('button', { onclick: function () { App.go('learn'); } }, 'Barchasi →')), box));
+    add(h('div', null, h('div.section-label', null, 'Modullar', h('button', { onclick: function () { App.go('learn'); } }, 'Barchasi (' + ms.length + ') →')), box));
     // last exam
-    const ex = Store.d.exam || [];
     if (ex.length) {
       const last = ex[ex.length - 1], g = grade(last.s);
-      body.appendChild(h('div', { style: '--i:4' }, h('div.section-label', 'Oxirgi yakuniy test'),
+      add(h('div', null, h('div.section-label', 'Oxirgi yakuniy test'),
         h('button.card.continue-card', { style: 'width:100%;text-align:left', onclick: function () { App.go('exam/r/' + (ex.length - 1)); } },
           UI.ring(last.s, 54, 6, '<span style="font-size:.95rem">' + last.s + '</span>', '#34d399', '#2563eb'),
           h('div.grow', null, h('div.card-title', g.t + ' (' + g.n + ')'), h('div.small.muted', U.dateUz(last.d) + ' · ' + last.r + '/' + EXAM_N + ' to\'g\'ri')),
           raw(IC('right', 20)))));
     }
-    body.appendChild(h('div.credit', { style: '--i:5' }, h('b', 'Toshkent-AERO IBK · O\'quv qo\'llanmasi'), h('span', 'by SHAKHOBIDDIN NORMAMATOV')));
+    add(h('div.credit', null, h('b', 'Toshkent-AERO IBK · O\'quv qo\'llanmasi'), h('span', 'by SHAKHOBIDDIN NORMAMATOV')));
     return { el: h('div', null, h('div.scroll', null, hero, body)), tabs: true };
   };
 
@@ -976,7 +1061,7 @@
       const sp = h('div.splash', null, raw(this.art('emblem')), h('div.t1', 'Bojxona xodimi qo\'llanmasi'), h('div.t2', 'Toshkent-AERO IBK'));
       app.appendChild(sp);
       const reduce = document.documentElement.getAttribute('data-motion') === 'reduce' || (global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches && Store.d.set.motion !== 'full');
-      setTimeout(function () { sp.classList.add('out'); setTimeout(function () { sp.remove(); }, 450); self.slidesUI(); }, reduce ? 400 : 2300);
+      setTimeout(function () { sp.classList.add('out'); setTimeout(function () { sp.remove(); }, 450); if (self.open) self.slidesUI(); }, reduce ? 400 : 2300);
     },
     slidesUI: function () {
       const self = this; let i = 0;
@@ -994,6 +1079,17 @@
         stage.innerHTML = '';
         stage.appendChild(h('div.intro-art', { html: self.art(s.art) }));
         stage.appendChild(h('h2', s.t)); stage.appendChild(h('p', s.d));
+        // last slide: optional name for a personal greeting (Telegram already gives one)
+        const u = TG.user();
+        const askName = i === self.slides.length - 1 && !(u && u.first_name);
+        stage.classList.toggle('has-field', askName);
+        if (askName) {
+          const keep = self.nameIn ? self.nameIn.value : (Store.d.first || '');
+          self.nameIn = h('input.intro-name', { type: 'text', placeholder: 'Ismingiz (ixtiyoriy)', maxlength: 40, autocomplete: 'given-name', enterkeyhint: 'done', 'aria-label': 'Ismingiz' });
+          self.nameIn.value = keep;
+          self.nameIn.addEventListener('keydown', function (e) { if (e.key === 'Enter') self.close(); });
+          stage.appendChild(h('label.intro-field', null, h('span', 'Sizga qanday murojaat qilaylik?'), self.nameIn));
+        }
         Array.prototype.forEach.call(dots.children, function (d, k) { d.classList.toggle('on', k === i); });
         btn.innerHTML = i < self.slides.length - 1 ? 'Keyingi ' + IC('arrow', 18) : IC('rocket', 18) + ' Boshlash';
         TG.hap('light');
@@ -1005,9 +1101,15 @@
       show();
     },
     close: function () {
-      this.open = false; Store.d.intro = 1; Store.save();
-      if (this.el) { const el = this.el; el.style.animation = 'fadeOut .3s both'; setTimeout(function () { el.remove(); }, 300); }
+      if (!this.open) return;
+      this.open = false; Store.d.intro = 1;
+      if (this.nameIn) { const v = this.nameIn.value.trim().replace(/\s+/g, ' ').slice(0, 40); if (v) Store.d.first = v; this.nameIn = null; }
+      Store.save();
+      if (this.el) { const el = this.el; el.style.animation = 'fadeOut .3s both'; setTimeout(function () { el.remove(); }, 300); this.el = null; }
       const sp = document.querySelector('.splash'); if (sp) sp.remove();
+      // the home screen was built under the intro: rebuild it so the greeting is
+      // personal and its entrance animation plays now that it is visible
+      if (App.path === '') App.render('', 'fade');
       App.syncBack();
     },
     art: function (k) {

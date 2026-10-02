@@ -300,7 +300,9 @@
       self.coverDur.innerHTML = IC('video', 14) + ' ' + U.mmss(self.total) + ' · ' + self.scenes.length + ' sahna · qalamda chizilgan';
       self.time.textContent = '0:00 / ' + U.mmss(self.total);
       self.ready = true;
-      self.enterScene(0); self.render(self.scenes[0].dur - 1, true); self.penEl.style.opacity = 0;
+      // poster = a clean board: nothing is written until the pen writes it
+      self.enterScene(0); self.render(0, true); self.penEl.style.opacity = 0;
+      self.cap.innerHTML = '<span class="vp-cap-hint">Subtitrlar shu yerda chiqadi</span>';
       if (self.wantPlay) self.play();
     });
   };
@@ -347,15 +349,34 @@
       Array.prototype.forEach.call(g.children, function (c) { let L = 20; try { L = c.getTotalLength(); } catch (er) {} if (!L || !isFinite(L)) L = 20; it.parts.push({ el: c, len: L, from: total }); total += L; });
       it.total = total || 1; it.kind = 'icon'; it.g = g; it.scale = s;
     } else if (e.k === 'text') {
-      const t = S('text', { x: e.x, y: e.y, fill: e.c || INK, 'font-size': e.s || 22, 'text-anchor': e.a || 'start', 'font-family': e.f === 'ui' ? 'Jakarta, sans-serif' : 'Caveat, cursive', 'font-weight': e.wt || 700 });
-      t.textContent = e.t;
+      // Every character is its own <tspan> that starts fully transparent and is
+      // inked only when the pen reaches it. (A clip-path reveal is not repainted
+      // reliably by iOS WebKit, so text there showed up before it was written.)
+      const size = e.s || 22;
+      const str = String(e.t).replace(/\s+/g, ' ').trim();
+      const t = S('text', { x: e.x, y: e.y, fill: e.c || INK, 'font-size': size, 'text-anchor': e.a || 'start', 'font-family': e.f === 'ui' ? 'Jakarta, sans-serif' : 'Caveat, cursive', 'font-weight': e.wt || 700 });
+      const chars = Array.from(str);
+      const spans = chars.map(function (ch) { const sp = S('tspan', { 'fill-opacity': 0 }); sp.textContent = ch; t.appendChild(sp); return sp; });
       layer.appendChild(t);
-      let bb; try { bb = t.getBBox(); } catch (er) { bb = { x: e.x, y: e.y - 20, width: 100, height: 24 }; }
-      const id = 'c' + Math.random().toString(36).slice(2, 9);
-      const cp = S('clipPath', { id: id }); const r = S('rect', { x: bb.x - 3, y: bb.y - 4, width: 0, height: bb.height + 8 });
-      cp.appendChild(r); this.defs.appendChild(cp);
-      t.setAttribute('clip-path', 'url(#' + id + ')');
-      it.el = t; it.clip = r; it.bb = bb; it.kind = 'text';
+      const estW = tw(str, size, e.f, e.wt);
+      const estX = e.a === 'middle' ? e.x - estW / 2 : (e.a === 'end' ? e.x - estW : e.x);
+      let bb = null; try { bb = t.getBBox(); } catch (er) {}
+      if (!bb || !(bb.width > 0)) bb = { x: estX, y: e.y - size * .8, width: estW, height: size };
+      // per-character start / end x so the pen tip sits exactly on the letter being written
+      const x0 = [], x1 = [];
+      try {
+        let u = 0;
+        for (let i = 0; i < chars.length; i++) {
+          const a = t.getStartPositionOfChar(u).x, b = t.getEndPositionOfChar(u + chars[i].length - 1).x;
+          if (!isFinite(a) || !isFinite(b)) throw 0;
+          x0.push(a); x1.push(b); u += chars[i].length;
+        }
+        if (chars.length && x1[x1.length - 1] - x0[0] <= 0) throw 0;
+      } catch (er) {
+        x0.length = 0; x1.length = 0;
+        for (let i = 0; i < chars.length; i++) { x0.push(bb.x + bb.width * i / chars.length); x1.push(bb.x + bb.width * (i + 1) / chars.length); }
+      }
+      it.el = t; it.chars = spans; it.ops = spans.map(function () { return 0; }); it.x0 = x0; it.x1 = x1; it.bb = bb; it.kind = 'text';
     } else if (e.k === 'hl') {
       const r = S('rect', { x: e.x, y: e.y, width: 0, height: e.h, rx: 4, fill: e.c || '#fde047', opacity: .45 });
       r.style.mixBlendMode = 'multiply';
@@ -394,9 +415,15 @@
         });
         if (tp && p < 1) tip = { x: tp.x, y: tp.y, c: e.c };
       } else if (it.kind === 'text') {
-        const w = (it.bb.width + 6) * p;
-        it.clip.setAttribute('width', w);
-        if (p > 0 && p < 1) tip = { x: it.bb.x + w, y: it.bb.y + it.bb.height * (.55 + .18 * Math.sin(p * 40)), c: e.c };
+        const n = it.chars.length, prog = p * n;
+        for (let j = 0; j < n; j++) {
+          const op = Math.round(clamp((prog - j) * 1.6, 0, 1) * 20) / 20;
+          if (op !== it.ops[j]) { it.ops[j] = op; it.chars[j].setAttribute('fill-opacity', op); }
+        }
+        if (n && p > 0 && p < 1) {
+          const j = Math.min(n - 1, Math.floor(prog)), f = prog - j;
+          tip = { x: it.x0[j] + (it.x1[j] - it.x0[j]) * f, y: it.bb.y + it.bb.height * (.55 + .18 * Math.sin(p * 40)), c: e.c };
+        }
       } else if (it.kind === 'hl') {
         it.el.setAttribute('width', (e.w || 100) * easeOut(p));
         if (p > 0 && p < 1) tip = { x: e.x + (e.w || 100) * easeOut(p), y: e.y + e.h * .6, c: '#ca8a04' };
@@ -462,6 +489,7 @@
     const self = this;
     if (!this.ready) { this.wantPlay = true; return; }
     if (this.t >= this.total) this.t = 0;
+    if (this.t === 0) { this.enterScene(0); this.render(0, true); }
     this.cover.style.display = 'none';
     const endOv = this.el.querySelector('.vp-end'); if (endOv) endOv.remove();
     this.playing = true; this.last = 0;
